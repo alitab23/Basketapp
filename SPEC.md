@@ -169,7 +169,7 @@ interface SeasonTemplate {   // t.ex. "U14, 2 pass/vecka, 90 min"
 }
 ```
 
-Koordinater på planen lagras i **meter** i ett fast koordinatsystem (FIBA: helplan 28 × 15 m, halvplan 14 × 15 m, origo i planens mitt), så att ritningar ser likadana ut oavsett skärmstorlek.
+Koordinater på planen lagras i **meter** i ett fast koordinatsystem (FIBA: helplan 28 × 15 m, halvplan 14 × 15 m, origo i planens mitt), så att ritningar ser likadana ut oavsett skärmstorlek. Origo är alltid mitt på **helplanen** (x från −14 till 14, y från −7,5 till 7,5). Halvplanen är den högra halvan (x från 0 till 14), så att objekten behåller sin plats när man byter mellan halv- och helplan. Även storlekar (spelarsymboler, text, linjebredd) anges i meter.
 
 All data sparas först lokalt i webbläsaren (IndexedDB), som i sessionplan. För inloggade lag är varje pass även ett Yjs-dokument som synkas via servern; servern håller dessutom en databas med användare, lag och behörigheter.
 
@@ -271,7 +271,8 @@ Ritytan är en vektorbaserad basketplan (SVG) med en verktygspalett till vänste
 ```typescript
 type CourtElement =
   | { id: string; type: "offense" | "defense" | "coach" | "ball" | "cone";
-      x: number; y: number; label?: string; color?: string; rotation?: number }
+      x: number; y: number; label?: string; color?: string; rotation?: number;
+      attachedTo?: string }   // bara boll: id för spelaren som bollen följer med
   | { id: string; type: "pass" | "dribble" | "cut" | "screen" | "handoff" | "shot" | "slide";
       points: { x: number; y: number }[]; curved: boolean;
       fromElementId?: string; order?: number; color?: string }

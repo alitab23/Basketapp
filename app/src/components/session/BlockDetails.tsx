@@ -4,13 +4,14 @@ import type { Block } from '../../types/model';
 import { renderMarkdown } from '../../lib/markdown';
 import { ui } from '../ui';
 import type { BlockPatch } from './BlockRow';
+import { DrawingSection } from './DrawingSection';
 
 interface Props {
   block: Block;
   onChange: (patch: BlockPatch, coalesceKey: string) => void;
 }
 
-/** Expanded block: markdown instructions, equipment and players. The drawing tool arrives in step 3. */
+/** Expanded block: drawings and photos, markdown instructions, equipment and players. */
 export default function BlockDetails({ block, onChange }: Props) {
   const { t } = useTranslation();
   const id = useId();
@@ -22,7 +23,9 @@ export default function BlockDetails({ block, onChange }: Props) {
     }`;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      <DrawingSection block={block} onChange={onChange} />
+
       <div>
         <div className="mb-1 flex items-center gap-2">
           <label className={ui.label} htmlFor={`${id}-instructions`}>
