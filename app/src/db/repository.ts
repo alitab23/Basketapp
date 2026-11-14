@@ -93,6 +93,11 @@ export function listRecentSessions(db: BasketappDB, limit = 50): Promise<Session
   return db.sessions.orderBy('updatedAt').reverse().limit(limit).toArray();
 }
 
+/** All sessions, most recently changed first. */
+export function listAllSessions(db: BasketappDB): Promise<Session[]> {
+  return db.sessions.orderBy('updatedAt').reverse().toArray();
+}
+
 /** Sessions in a season by date and start time; sessions without a date last. */
 export async function listSeasonSessions(db: BasketappDB, seasonId: string): Promise<Session[]> {
   const sessions = await db.sessions.where('seasonId').equals(seasonId).toArray();

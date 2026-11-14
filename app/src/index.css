@@ -13,3 +13,16 @@
     color-scheme: dark;
   }
 }
+
+/* Rendered markdown in block instructions. */
+@layer components {
+  .markdown > * + * { @apply mt-2; }
+  .markdown h1, .markdown h2, .markdown h3 { @apply font-semibold; }
+  .markdown h1 { @apply text-lg; }
+  .markdown h2 { @apply text-base; }
+  .markdown ul { @apply list-disc pl-5; }
+  .markdown ol { @apply list-decimal pl-5; }
+  .markdown a { @apply text-orange-600 underline; }
+  .markdown code { @apply rounded bg-slate-100 px-1 dark:bg-slate-700; }
+  .markdown blockquote { @apply border-l-4 border-slate-300 pl-3 text-slate-600 dark:border-slate-600 dark:text-slate-300; }
+}

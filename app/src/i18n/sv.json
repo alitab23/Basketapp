@@ -1,19 +1,110 @@
 {
   "app": {
     "name": "Basketapp",
-    "tagline": "Planera träningspass och rita övningar"
+    "tagline": "Planera träningspass och rita övningar",
+    "home": "Till startsidan"
   },
   "start": {
     "newSession": "Nytt pass",
+    "newSeason": "Ny säsong",
     "recentSessions": "Senast ändrade pass",
+    "seasons": "Säsonger",
     "empty": "Inga pass ännu. Skapa ditt första pass för att komma igång.",
+    "noSeasons": "Inga säsonger ännu.",
     "blocks_one": "{{count}} block",
     "blocks_other": "{{count}} block",
-    "changed": "ändrad {{when}}",
-    "comingSoon": "Passvyn kommer i nästa steg."
+    "sessions_one": "{{count}} pass",
+    "sessions_other": "{{count}} pass",
+    "changed": "ändrad {{when}}"
   },
   "session": {
-    "untitled": "Nytt pass"
+    "untitled": "Nytt pass",
+    "copyTitle": "{{title}} (kopia)",
+    "notFound": "Passet finns inte. Det kan ha raderats.",
+    "loading": "Laddar pass…",
+    "title": "Titel",
+    "date": "Datum",
+    "startTime": "Starttid",
+    "location": "Hall",
+    "participants": "Antal spelare",
+    "coach": "Ansvarig tränare",
+    "focus": "Tema",
+    "description": "Beskrivning",
+    "maxDuration": "Maxtid i hallen (min)",
+    "season": "Säsong",
+    "noSeason": "Ingen säsong (fristående)",
+    "total": "Total tid",
+    "overMax": "Passet är {{over}} min längre än maxtiden för hallen ({{max}} min).",
+    "distribution": "Fördelning per blocktyp",
+    "noType": "Utan blocktyp",
+    "nextDay": "+1 dag",
+    "duplicate": "Duplicera pass",
+    "delete": "Radera pass",
+    "confirmDelete": "Radera passet ”{{title}}”? Det går inte att ångra.",
+    "undo": "Ångra",
+    "redo": "Gör om",
+    "empty": "Passet är tomt. Lägg till en övning, en paus eller en rubrik."
+  },
+  "block": {
+    "addDrill": "Övning",
+    "addBreak": "Paus",
+    "addSection": "Rubrik",
+    "newDrill": "Ny övning",
+    "newBreak": "Paus",
+    "newSection": "Ny rubrik",
+    "title": "Titel",
+    "duration": "Längd i minuter",
+    "minus5": "5 minuter kortare",
+    "plus5": "5 minuter längre",
+    "type": "Blocktyp",
+    "noType": "Ingen blocktyp",
+    "instructions": "Instruktioner",
+    "instructionsHint": "Syfte, organisation och coachingpunkter. Markdown fungerar.",
+    "write": "Skriv",
+    "preview": "Förhandsvisa",
+    "nothingToPreview": "Inget att visa ännu.",
+    "material": "Material",
+    "materialPlaceholder": "Bollar, koner, västar",
+    "playersNeeded": "Antal spelare",
+    "playersNeededPlaceholder": "t.ex. 4 mot 4 + 2",
+    "expand": "Visa detaljer",
+    "collapse": "Dölj detaljer",
+    "duplicate": "Duplicera",
+    "delete": "Radera",
+    "dragHandle": "Flytta ”{{title}}”",
+    "sectionTotal": "{{duration}} totalt",
+    "time": "{{start}}–{{end}}"
+  },
+  "dnd": {
+    "pickedUp": "Tog upp ”{{title}}”. Använd piltangenterna för att flytta och mellanslag för att släppa.",
+    "movedOver": "”{{title}}” är över position {{position}} av {{total}}.",
+    "dropped": "”{{title}}” släpptes på position {{position}} av {{total}}.",
+    "cancelled": "Flytten avbröts. ”{{title}}” ligger kvar.",
+    "instructions": "Tryck mellanslag eller Enter för att ta upp. Flytta med piltangenterna, släpp med mellanslag eller Enter, avbryt med Escape.",
+    "movedSession": "Passet flyttades till {{date}}."
+  },
+  "season": {
+    "untitled": "Ny säsong",
+    "notFound": "Säsongen finns inte.",
+    "name": "Namn",
+    "startDate": "Startdatum",
+    "endDate": "Slutdatum",
+    "description": "Beskrivning",
+    "totalTime": "Total träningstid",
+    "list": "Lista",
+    "calendar": "Kalender",
+    "newSession": "Nytt pass",
+    "duplicate": "Duplicera",
+    "noDate": "Utan datum",
+    "empty": "Inga pass i säsongen ännu.",
+    "previousMonth": "Föregående månad",
+    "nextMonth": "Nästa månad",
+    "today": "Idag"
+  },
+  "save": {
+    "saved": "Sparat",
+    "saving": "Sparar…",
+    "offline": "Offline – sparas lokalt"
   },
   "duration": {
     "hoursMinutes": "{{hours}} h {{minutes}} min",
@@ -26,6 +117,9 @@
   },
   "network": {
     "offline": "Offline – sparas lokalt"
+  },
+  "notFound": {
+    "title": "Sidan finns inte."
   },
   "pwa": {
     "offlineReady": "Appen fungerar nu även offline.",
