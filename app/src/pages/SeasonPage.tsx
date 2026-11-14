@@ -2,9 +2,13 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Calendar, Copy, List, Plus } from 'lucide-react';
+import { ArrowLeft, Calendar, Copy, Download, LayoutTemplate, List, Plus, Trash2 } from 'lucide-react';
 import { db } from '../db/schema';
-import { createSession, duplicateSession, getSeason, listSeasonSessions, moveSession, updateSeason } from '../db/repository';
+import { createSession, duplicateSession, getSeason, listSeasonSessions, moveSession, moveToTrash, restoreFromTrash, updateSeason } from '../db/repository';
+import { buildExport, downloadExport } from '../exchange/export';
+import { seasonTemplateOf } from '../templates/apply';
+import { SaveTemplateDialog } from '../components/templates/SaveTemplateDialog';
+import { useToast } from '../components/Toast';
 import { calculateSchedule } from '../lib/schedule';
 import { blockCount, totalMinutes } from '../lib/time';
 import { formatDate, isWithin, monthOf, todayISO } from '../lib/dates';
@@ -23,6 +27,8 @@ export function SeasonPage() {
   const sessions = useLiveQuery(() => listSeasonSessions(db, id), [id]) ?? [];
   const [view, setView] = useState<View>('list');
   const [moved, setMoved] = useState<{ id: string; from?: string; to: string } | null>(null);
+  const [saveTemplate, setSaveTemplate] = useState(false);
+  const toast = useToast();
 
   if (season === undefined) return null;
   if (season === null) {
@@ -51,6 +57,18 @@ export function SeasonPage() {
     setMoved({ id: sessionId, from, to: date });
   }
 
+  async function handleExport() {
+    const file = await buildExport(db, 'season', id);
+    toast(t('library.exported', { file: downloadExport(file, season!.name) }));
+  }
+
+  async function handleDelete() {
+    if (!window.confirm(t('season.confirmDelete', { name: season!.name }))) return;
+    await moveToTrash(db, 'season', id);
+    toast(t('library.movedToTrash', { title: season!.name }), { label: t('toast.undo'), onClick: () => void restoreFromTrash(db, 'season', id) });
+    void navigate('/', { replace: true });
+  }
+
   async function undoMove() {
     if (!moved) return;
     await moveSession(db, moved.id, { date: moved.from });
@@ -67,9 +85,22 @@ export function SeasonPage() {
 
   return (
     <div className="space-y-6">
-      <Link to="/" className={ui.icon} aria-label={t('app.home')} title={t('app.home')}>
-        <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-      </Link>
+      <div className="flex items-center gap-1">
+        <Link to="/" className={ui.icon} aria-label={t('app.home')} title={t('app.home')}>
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+        </Link>
+        <div className="ml-auto flex items-center gap-1">
+          <button type="button" className={ui.icon} onClick={() => setSaveTemplate(true)} aria-label={t('season.saveAsTemplate')} title={t('season.saveAsTemplate')}>
+            <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" className={ui.icon} onClick={() => void handleExport()} aria-label={t('season.export')} title={t('season.export')}>
+            <Download className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" className={ui.icon} onClick={() => void handleDelete()} aria-label={t('season.delete')} title={t('season.delete')}>
+            <Trash2 className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
 
       <section className={`${ui.card} space-y-4 p-4 sm:p-5`}>
         <SeasonFields season={season} />
@@ -116,6 +147,10 @@ export function SeasonPage() {
           const copy = await duplicateSession(db, sid, { title: t('session.copyTitle', { title }) });
           if (copy) void navigate(`/pass/${copy.id}`);
         }} />
+      )}
+
+      {saveTemplate && (
+        <SaveTemplateDialog kind="season" defaultName={season.name} content={() => seasonTemplateOf(season, sessions)} onClose={() => setSaveTemplate(false)} />
       )}
     </div>
   );

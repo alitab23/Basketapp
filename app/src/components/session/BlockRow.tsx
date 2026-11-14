@@ -1,5 +1,5 @@
 import { lazy, Suspense, type HTMLAttributes, type Ref } from 'react';
-import { ChevronDown, ChevronRight, Copy, GripVertical, Minus, Plus, Trash2 } from 'lucide-react';
+import { BookmarkPlus, ChevronDown, ChevronRight, Copy, GripVertical, LayoutTemplate, Minus, Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Block, BlockType } from '../../types/model';
 import type { ScheduleRow } from '../../lib/schedule';
@@ -25,6 +25,8 @@ export interface BlockRowProps {
   onDuration: (delta: number) => void;
   onDuplicate: () => void;
   onDelete: () => void;
+  onSaveToLibrary?: () => void;
+  onSaveAsTemplate?: () => void;
   /** Spread onto the drag handle (from dnd-kit). */
   handleProps?: HTMLAttributes<HTMLButtonElement>;
   handleRef?: Ref<HTMLButtonElement>;
@@ -50,10 +52,20 @@ function DragHandle({ title, handleProps, handleRef }: Pick<BlockRowProps, 'hand
   );
 }
 
-function RowActions({ onDuplicate, onDelete }: Pick<BlockRowProps, 'onDuplicate' | 'onDelete'>) {
+function RowActions({ onDuplicate, onDelete, onSaveToLibrary, onSaveAsTemplate }: Pick<BlockRowProps, 'onDuplicate' | 'onDelete' | 'onSaveToLibrary' | 'onSaveAsTemplate'>) {
   const { t } = useTranslation();
   return (
     <>
+      {onSaveToLibrary && (
+        <button type="button" className={ui.icon} onClick={onSaveToLibrary} aria-label={t('block.saveToLibrary')} title={t('block.saveToLibrary')}>
+          <BookmarkPlus className="h-4 w-4" aria-hidden="true" />
+        </button>
+      )}
+      {onSaveAsTemplate && (
+        <button type="button" className={ui.icon} onClick={onSaveAsTemplate} aria-label={t('block.saveAsTemplate')} title={t('block.saveAsTemplate')}>
+          <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
+        </button>
+      )}
       <button type="button" className={ui.icon} onClick={onDuplicate} aria-label={t('block.duplicate')} title={t('block.duplicate')}>
         <Copy className="h-4 w-4" aria-hidden="true" />
       </button>
@@ -166,7 +178,7 @@ function DrillRow({ block, row, blockTypes, expanded, onToggle, onChange, onDura
           >
             {expanded ? <ChevronDown className="h-4 w-4" aria-hidden="true" /> : <ChevronRight className="h-4 w-4" aria-hidden="true" />}
           </button>
-          <RowActions onDuplicate={rest.onDuplicate} onDelete={rest.onDelete} />
+          <RowActions onDuplicate={rest.onDuplicate} onDelete={rest.onDelete} onSaveToLibrary={rest.onSaveToLibrary} onSaveAsTemplate={rest.onSaveAsTemplate} />
         </div>
       </div>
 

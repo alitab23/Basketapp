@@ -31,6 +31,13 @@ export function insertBlock(items: readonly Block[], block: Block, afterId?: str
   return [...items.slice(0, index + 1), block, ...items.slice(index + 1)];
 }
 
+/** Inserts before `beforeId`, or at the end when it is null or missing. */
+export function insertBefore(items: readonly Block[], block: Block, beforeId: string | null): Block[] {
+  const index = beforeId ? items.findIndex((b) => b.id === beforeId) : -1;
+  if (index < 0) return [...items, block];
+  return [...items.slice(0, index), block, ...items.slice(index)];
+}
+
 export function moveBlock(items: readonly Block[], fromId: string, toId: string): Block[] {
   const from = items.findIndex((b) => b.id === fromId);
   const to = items.findIndex((b) => b.id === toId);

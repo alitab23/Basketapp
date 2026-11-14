@@ -108,6 +108,7 @@ export function DrawingSection({ block, onChange }: Props) {
       onDrop={(e) => {
         if (!e.dataTransfer.files.length) return;
         e.preventDefault();
+        e.stopPropagation(); // photos for this drill, not an import
         setDragOver(false);
         void addFiles(e.dataTransfer.files);
       }}

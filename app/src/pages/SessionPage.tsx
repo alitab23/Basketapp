@@ -1,20 +1,26 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Copy, Heading, Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
+import { ArrowLeft, Copy, Download, Heading, LayoutTemplate, Library, Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
 import { db } from '../db/schema';
-import { deleteSession, duplicateSession, listBlockTypes, listSeasons } from '../db/repository';
+import { createDrill, duplicateSession, listBlockTypes, listSeasons, moveToTrash, restoreFromTrash } from '../db/repository';
 import { useSessionEditor } from '../hooks/useSessionEditor';
 import { useUndoShortcuts } from '../hooks/useUndoShortcuts';
 import { calculateSchedule } from '../lib/schedule';
-import { changeDuration, duplicateBlock, insertBlock, moveBlock, newBlock, removeBlock, updateBlock } from '../lib/blockOps';
+import { changeDuration, duplicateBlock, insertBlock, insertBefore, moveBlock, newBlock, removeBlock, updateBlock } from '../lib/blockOps';
+import { drillContentFromBlock } from '../lib/clone';
+import { sessionContentOf } from '../templates/apply';
+import { buildExport, downloadExport } from '../exchange/export';
+import { LibraryPanel } from '../components/session/LibraryPanel';
+import { SaveTemplateDialog } from '../components/templates/SaveTemplateDialog';
+import { useToast } from '../components/Toast';
 import { SessionHeader } from '../components/session/SessionHeader';
 import { SessionSummary } from '../components/session/SessionSummary';
 import { BlockList } from '../components/session/BlockList';
 import { SaveStatus } from '../components/SaveStatus';
 import { ui } from '../components/ui';
-import type { Block, BlockType } from '../types/model';
+import type { Block, BlockType, Template } from '../types/model';
 
 const BREAK_TYPE_ID = 'bt-break';
 
@@ -27,6 +33,9 @@ export function SessionPage() {
   const blockTypes = useLiveQuery(() => listBlockTypes(db), []) ?? [];
   const seasons = useLiveQuery(() => listSeasons(db), []) ?? [];
   const typeMap = useMemo(() => new Map<string, BlockType>(blockTypes.map((bt) => [bt.id, bt])), [blockTypes]);
+  const toast = useToast();
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [saveTemplate, setSaveTemplate] = useState<{ kind: Template['kind']; name: string; content: () => Template['content'] } | null>(null);
 
   useUndoShortcuts(editor.undo, editor.redo);
 
@@ -58,11 +67,36 @@ export function SessionPage() {
 
   async function handleDelete() {
     if (!window.confirm(t('session.confirmDelete', { title: session!.title }))) return;
-    await deleteSession(db, id);
+    await editor.flush();
+    await moveToTrash(db, 'session', id);
+    toast(t('library.movedToTrash', { title: session!.title }), { label: t('toast.undo'), onClick: () => void restoreFromTrash(db, 'session', id) });
     void navigate(backTo, { replace: true });
   }
 
+  async function handleExport() {
+    await editor.flush();
+    const file = await buildExport(db, 'session', id);
+    toast(t('library.exported', { file: downloadExport(file, session!.title) }));
+  }
+
+  async function saveBlockToLibrary(blockId: string) {
+    const block = session!.items.find((b) => b.id === blockId);
+    if (!block) return;
+    const drill = await createDrill(db, drillContentFromBlock(block));
+    toast(t('drill.savedToLibrary', { title: drill.title }), { label: t('toast.open'), onClick: () => void navigate(`/ovning/${drill.id}`) });
+  }
+
+  function saveBlockAsTemplate(blockId: string) {
+    const block = session!.items.find((b) => b.id === blockId);
+    if (!block) return;
+    setSaveTemplate({ kind: 'drill', name: block.title, content: () => ({ ...drillContentFromBlock(block), updatedAt: new Date().toISOString() }) });
+  }
+
   const add = (block: Block) => setItems((items) => insertBlock(items, block));
+  const addFromLibrary = (block: Block, beforeId: string | null = null) => {
+    setItems((items) => insertBefore(items, block, beforeId));
+    toast(t('panel.added', { title: block.title }));
+  };
 
   return (
     <div className="space-y-6">
@@ -77,6 +111,12 @@ export function SessionPage() {
           </button>
           <button type="button" className={ui.icon} onClick={editor.redo} disabled={!editor.canRedo} aria-label={t('session.redo')} title={`${t('session.redo')} (Ctrl+Shift+Z)`}>
             <Redo2 className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" className={ui.icon} onClick={() => setSaveTemplate({ kind: 'session', name: session.title, content: () => sessionContentOf(session) })} aria-label={t('session.saveAsTemplate')} title={t('session.saveAsTemplate')}>
+            <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" className={ui.icon} onClick={() => void handleExport()} aria-label={t('session.export')} title={t('session.export')}>
+            <Download className="h-4 w-4" aria-hidden="true" />
           </button>
           <button type="button" className={ui.icon} onClick={() => void handleDuplicate()} aria-label={t('session.duplicate')} title={t('session.duplicate')}>
             <Copy className="h-4 w-4" aria-hidden="true" />
@@ -93,22 +133,21 @@ export function SessionPage() {
       </section>
 
       <section className="space-y-3">
-        {session.items.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-slate-500 dark:border-slate-700 dark:text-slate-400">
-            {t('session.empty')}
-          </p>
-        ) : (
-          <BlockList
-            items={session.items}
-            startTime={session.startTime}
-            blockTypes={blockTypes}
-            onMove={(from, to) => setItems((items) => moveBlock(items, from, to))}
-            onChange={(blockId, patch, key) => setItems((items) => updateBlock(items, blockId, patch), key)}
-            onDuration={(blockId, delta) => setItems((items) => changeDuration(items, blockId, delta))}
-            onDuplicate={(blockId) => setItems((items) => duplicateBlock(items, blockId))}
-            onDelete={(blockId) => setItems((items) => removeBlock(items, blockId))}
-          />
-        )}
+        <BlockList
+          items={session.items}
+          startTime={session.startTime}
+          blockTypes={blockTypes}
+          emptyText={t('session.empty')}
+          onMove={(from, to) => setItems((items) => moveBlock(items, from, to))}
+          onChange={(blockId, patch, key) => setItems((items) => updateBlock(items, blockId, patch), key)}
+          onDuration={(blockId, delta) => setItems((items) => changeDuration(items, blockId, delta))}
+          onDuplicate={(blockId) => setItems((items) => duplicateBlock(items, blockId))}
+          onDelete={(blockId) => setItems((items) => removeBlock(items, blockId))}
+          onSaveToLibrary={(blockId) => void saveBlockToLibrary(blockId)}
+          onSaveAsTemplate={saveBlockAsTemplate}
+          onInsert={addFromLibrary}
+          sidePanel={panelOpen ? <LibraryPanel blockTypes={blockTypes} onAdd={(b) => addFromLibrary(b)} onClose={() => setPanelOpen(false)} /> : undefined}
+        />
 
         <div className="flex flex-wrap gap-2">
           <button type="button" className={ui.secondary} onClick={() => add(newBlock({ title: t('block.newDrill'), duration: 10 }))}>
@@ -126,8 +165,13 @@ export function SessionPage() {
           <button type="button" className={ui.secondary} onClick={() => add(newBlock({ title: t('block.newSection'), kind: 'section' }))}>
             <Heading className="h-4 w-4" aria-hidden="true" /> {t('block.addSection')}
           </button>
+          <button type="button" className={ui.secondary} aria-pressed={panelOpen} onClick={() => setPanelOpen((o) => !o)}>
+            <Library className="h-4 w-4" aria-hidden="true" /> {t('panel.open')}
+          </button>
         </div>
       </section>
+
+      {saveTemplate && <SaveTemplateDialog kind={saveTemplate.kind} defaultName={saveTemplate.name} content={saveTemplate.content} onClose={() => setSaveTemplate(null)} />}
     </div>
   );
 }

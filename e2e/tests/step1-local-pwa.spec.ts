@@ -64,7 +64,9 @@ test('default block types are stored in IndexedDB', async ({ page }) => {
 
 test('language can be switched to English and is remembered', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('combobox').selectOption('en');
+  await page.getByRole('button', { name: 'Meny' }).click();
+  await page.getByTestId('app-menu').getByRole('combobox').selectOption('en');
+  await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: /New session/ })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button', { name: /New session/ })).toBeVisible();

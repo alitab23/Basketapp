@@ -137,7 +137,7 @@ test('a season lists its sessions and they can be moved between dates in the cal
 
   await page.getByRole('button', { name: 'Nytt pass' }).click();
   await expect(page).toHaveURL(/\/pass\//);
-  await page.getByLabel('Datum').fill('2026-09-01');
+  await page.getByLabel('Datum', { exact: true }).fill('2026-09-01');
   await addDrills(page, [30, 60]);
   await expect(page.getByLabel('Säsong')).toHaveValue(/.+/);
   await expect(page.getByTestId('save-status')).toHaveText('Sparat');

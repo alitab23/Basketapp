@@ -212,6 +212,33 @@ export async function listOwnTemplates(db: BasketappDB): Promise<Template[]> {
   return (await db.templates.toArray()).filter(live).sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''));
 }
 
+// ---------- The whole Library ----------
+
+/** Everything not in the trash, archived included (the Library can show archived items). */
+export async function listLibrary(db: BasketappDB) {
+  const [seasons, sessions, drills, templates] = await Promise.all([
+    db.seasons.toArray(),
+    db.sessions.toArray(),
+    db.drills.toArray(),
+    db.templates.toArray(),
+  ]);
+  return { seasons: seasons.filter(live), sessions: sessions.filter(live), drills: drills.filter(live), templates: templates.filter(live) };
+}
+
+/** Adds already-built objects (from templates or import). */
+export async function addSession(db: BasketappDB, session: Session): Promise<void> {
+  await db.sessions.add(session);
+}
+export async function addDrill(db: BasketappDB, drill: Drill): Promise<void> {
+  await db.drills.add(drill);
+}
+export async function addSeasonWithSessions(db: BasketappDB, season: Season, sessions: Session[]): Promise<void> {
+  await db.transaction('rw', db.seasons, db.sessions, async () => {
+    await db.seasons.add(season);
+    await db.sessions.bulkAdd(sessions);
+  });
+}
+
 // ---------- Archive and trash (SPEC.md section 6) ----------
 
 export type LibraryKind = 'season' | 'session' | 'drill' | 'template';

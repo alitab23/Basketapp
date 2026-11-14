@@ -15,7 +15,8 @@
     "blocks_other": "{{count}} block",
     "sessions_one": "{{count}} pass",
     "sessions_other": "{{count}} pass",
-    "changed": "ändrad {{when}}"
+    "changed": "ändrad {{when}}",
+    "openTemplate": "Öppna template"
   },
   "session": {
     "untitled": "Nytt pass",
@@ -40,10 +41,12 @@
     "nextDay": "+1 dag",
     "duplicate": "Duplicera pass",
     "delete": "Radera pass",
-    "confirmDelete": "Radera passet ”{{title}}”? Det går inte att ångra.",
+    "confirmDelete": "Flytta passet ”{{title}}” till papperskorgen?",
     "undo": "Ångra",
     "redo": "Gör om",
-    "empty": "Passet är tomt. Lägg till en övning, en paus eller en rubrik."
+    "empty": "Passet är tomt. Lägg till en övning, en paus eller en rubrik.",
+    "saveAsTemplate": "Spara passet som template",
+    "export": "Exportera passet"
   },
   "block": {
     "addDrill": "Övning",
@@ -73,7 +76,9 @@
     "delete": "Radera",
     "dragHandle": "Flytta ”{{title}}”",
     "sectionTotal": "{{duration}} totalt",
-    "time": "{{start}}–{{end}}"
+    "time": "{{start}}–{{end}}",
+    "saveToLibrary": "Spara i Biblioteket",
+    "saveAsTemplate": "Spara som template"
   },
   "dnd": {
     "pickedUp": "Tog upp ”{{title}}”. Använd piltangenterna för att flytta och mellanslag för att släppa.",
@@ -99,7 +104,11 @@
     "empty": "Inga pass i säsongen ännu.",
     "previousMonth": "Föregående månad",
     "nextMonth": "Nästa månad",
-    "today": "Idag"
+    "today": "Idag",
+    "saveAsTemplate": "Spara säsongen som template",
+    "export": "Exportera säsongen",
+    "delete": "Radera säsongen",
+    "confirmDelete": "Flytta säsongen ”{{name}}” och dess pass till papperskorgen?"
   },
   "save": {
     "saved": "Sparat",
@@ -327,5 +336,199 @@
         "instructions": "## Utförande\n- Gå igenom matchens anfallssystem 5 mot 0, sedan mot passivt försvar.\n- Repetera inbyten och specialsituationer (sidinkast, sista sekunderna).\n\n## Coachingpunkter\n- Alla vet sin roll i varje system."
       }
     }
+  },
+  "nav": {
+    "start": "Start",
+    "library": "Bibliotek",
+    "menu": "Meny",
+    "main": "Huvudmeny"
+  },
+  "library": {
+    "title": "Bibliotek",
+    "tabs": {
+      "seasons": "Säsonger",
+      "sessions": "Pass",
+      "drills": "Övningar",
+      "templates": "Templates",
+      "trash": "Papperskorg"
+    },
+    "search": "Sök",
+    "searchPlaceholder": "Sök på titel och text",
+    "allTags": "Alla taggar",
+    "allBlockTypes": "Alla blocktyper",
+    "allSeasons": "Alla säsonger",
+    "noSeason": "Utan säsong",
+    "allKinds": "Alla sorter",
+    "sort": "Sortera",
+    "sortUpdated": "Senast ändrad",
+    "sortName": "Namn",
+    "showArchived": "Visa arkiverade",
+    "results_one": "{{count}} träff",
+    "results_other": "{{count}} träffar",
+    "empty": "Inget här ännu.",
+    "noResults": "Inga träffar. Prova en annan sökning eller ta bort filtret.",
+    "newSeason": "Ny säsong",
+    "newSession": "Nytt pass",
+    "newDrill": "Ny övning",
+    "open": "Öppna",
+    "duplicate": "Duplicera",
+    "move": "Flytta till säsong",
+    "archive": "Arkivera",
+    "unarchive": "Ta fram ur arkivet",
+    "archived": "Arkiverad",
+    "delete": "Radera",
+    "exportJson": "Exportera JSON",
+    "saveAsTemplate": "Spara som template",
+    "use": "Använd",
+    "builtIn": "Inbyggd",
+    "kinds": {
+      "season": "Säsong",
+      "session": "Pass",
+      "drill": "Övning",
+      "template": "Template"
+    },
+    "minutes": "{{minutes}} min",
+    "movedToTrash": "”{{title}}” flyttades till papperskorgen.",
+    "archivedToast": "”{{title}}” arkiverades.",
+    "moved": "Passet flyttades till {{season}}.",
+    "exported": "Filen ”{{file}}” laddades ner.",
+    "trash": {
+      "info": "Raderade poster ligger här i 30 dagar och tas sedan bort för gott.",
+      "restore": "Återställ",
+      "deleteForever": "Radera för gott",
+      "empty": "Töm papperskorgen",
+      "confirmEmpty": "Radera allt i papperskorgen för gott? Det går inte att ångra.",
+      "confirmDeleteForever": "Radera ”{{title}}” för gott? Det går inte att ångra.",
+      "daysLeft_one": "{{count}} dag kvar",
+      "daysLeft_other": "{{count}} dagar kvar",
+      "nothing": "Papperskorgen är tom.",
+      "restored": "”{{title}}” återställdes."
+    }
+  },
+  "drill": {
+    "untitled": "Ny övning",
+    "notFound": "Övningen finns inte. Den kan ha raderats.",
+    "loading": "Laddar övning…",
+    "title": "Titel",
+    "defaultDuration": "Standardlängd (min)",
+    "tags": "Taggar",
+    "tagsHint": "Skilj taggar med komma, t.ex. skott, transition",
+    "type": "Blocktyp",
+    "back": "Till Biblioteket",
+    "saveToLibrary": "Spara i Biblioteket",
+    "savedToLibrary": "”{{title}}” sparades i Biblioteket."
+  },
+  "templates": {
+    "saveTitle": "Spara som template",
+    "name": "Namn",
+    "description": "Beskrivning",
+    "tags": "Taggar",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "saved": "Templaten ”{{name}}” sparades.",
+    "useTitle": "Använd ”{{name}}”",
+    "create": "Skapa",
+    "season": "Säsong",
+    "noSeason": "Ingen säsong (fristående)",
+    "date": "Datum",
+    "startTime": "Starttid",
+    "seasonName": "Säsongens namn",
+    "startDate": "Startdatum",
+    "weekdays": "Veckodagar",
+    "weekdaysHint": "{{weeks}} veckor · {{count}} pass",
+    "needWeekday": "Välj minst en veckodag.",
+    "drillInfo": "Övningen läggs till i Biblioteket som en kopia som du kan ändra.",
+    "copyInfo": "Templaten ändras inte – du får en egen kopia.",
+    "open": "Öppna template",
+    "kind": {
+      "season": "Säsongs-template",
+      "session": "Pass-template",
+      "drill": "Övnings-template"
+    }
+  },
+  "toast": {
+    "close": "Stäng",
+    "open": "Öppna",
+    "undo": "Ångra"
+  },
+  "menu": {
+    "title": "Meny",
+    "export": "Exportera data",
+    "import": "Importera data",
+    "clearAll": "Rensa allt",
+    "language": "Språk",
+    "data": "Data"
+  },
+  "export": {
+    "title": "Exportera data",
+    "scope": "Vad vill du exportera?",
+    "all": "Allt",
+    "library": "Hela Biblioteket (säsonger, pass och övningar)",
+    "templates": "Egna templates",
+    "season": "En säsong",
+    "session": "Ett pass",
+    "choose": "Välj…",
+    "submit": "Exportera",
+    "nothing": "Det finns inget att exportera.",
+    "allTitle": "allt",
+    "libraryTitle": "bibliotek",
+    "templatesTitle": "templates"
+  },
+  "import": {
+    "title": "Importera data",
+    "choose": "Välj fil",
+    "drop": "eller dra in en JSON-fil var som helst i appen",
+    "sessionplanLabel": "Klistra in en sessionplan-länk eller sessionplan-JSON",
+    "sessionplanButton": "Läs in",
+    "reading": "Läser…",
+    "preview": "Filen innehåller:",
+    "fromSessionplan": "Ett pass från sessionplan: ”{{title}}”",
+    "counts": {
+      "seasons_one": "{{count}} säsong",
+      "seasons_other": "{{count}} säsonger",
+      "sessions_one": "{{count}} pass",
+      "sessions_other": "{{count}} pass",
+      "drills_one": "{{count}} övning",
+      "drills_other": "{{count}} övningar",
+      "templates_one": "{{count}} template",
+      "templates_other": "{{count}} templates",
+      "images_one": "{{count}} bild",
+      "images_other": "{{count}} bilder"
+    },
+    "mode": "Hur ska posterna läggas in?",
+    "copies": "Lägg till som kopior (nya id:n)",
+    "replace": "Ersätt befintliga med samma id",
+    "submit": "Importera",
+    "done": "Importen är klar: {{summary}}.",
+    "dropAnywhere": "Släpp filen för att importera",
+    "errors": {
+      "invalidJson": "Filen är inte giltig JSON.",
+      "notBasketapp": "Filen är ingen Basketapp-fil (fältet ”format” saknas).",
+      "unknownVersion": "Filen kommer från en nyare version av Basketapp (version {{version}}). Uppdatera appen och försök igen.",
+      "invalid": "Filen har fel innehåll ({{detail}}).",
+      "sessionplan": "Det gick inte att läsa sessionplan-länken eller -filen.",
+      "empty": "Filen innehåller inget att importera.",
+      "read": "Filen kunde inte läsas."
+    }
+  },
+  "clearAll": {
+    "title": "Rensa allt",
+    "warning": "Allt som är sparat i den här webbläsaren raderas: säsonger, pass, övningar, templates och bilder. Det går inte att ångra.",
+    "exportFirst": "Exportera allt först",
+    "confirm": "Rensa allt",
+    "done": "Allt är rensat."
+  },
+  "panel": {
+    "open": "Från bibliotek",
+    "title": "Från Biblioteket",
+    "close": "Stäng panelen",
+    "search": "Sök övningar",
+    "drills": "Mina övningar",
+    "templates": "Övnings-templates",
+    "add": "Lägg till",
+    "added": "”{{title}}” lades till i passet.",
+    "empty": "Inga träffar.",
+    "dragHint": "Dra in i passet eller klicka på Lägg till. Övningen läggs in som en kopia.",
+    "dropHere": "Släpp här för att lägga till sist"
   }
 }

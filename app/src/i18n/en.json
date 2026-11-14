@@ -15,7 +15,8 @@
     "blocks_other": "{{count}} blocks",
     "sessions_one": "{{count}} session",
     "sessions_other": "{{count}} sessions",
-    "changed": "changed {{when}}"
+    "changed": "changed {{when}}",
+    "openTemplate": "Open template"
   },
   "session": {
     "untitled": "New session",
@@ -40,10 +41,12 @@
     "nextDay": "+1 day",
     "duplicate": "Duplicate session",
     "delete": "Delete session",
-    "confirmDelete": "Delete the session “{{title}}”? This can't be undone.",
+    "confirmDelete": "Move the session “{{title}}” to the trash?",
     "undo": "Undo",
     "redo": "Redo",
-    "empty": "The session is empty. Add a drill, a break or a heading."
+    "empty": "The session is empty. Add a drill, a break or a heading.",
+    "saveAsTemplate": "Save the session as a template",
+    "export": "Export the session"
   },
   "block": {
     "addDrill": "Drill",
@@ -73,7 +76,9 @@
     "delete": "Delete",
     "dragHandle": "Move “{{title}}”",
     "sectionTotal": "{{duration}} in total",
-    "time": "{{start}}–{{end}}"
+    "time": "{{start}}–{{end}}",
+    "saveToLibrary": "Save in the Library",
+    "saveAsTemplate": "Save as template"
   },
   "dnd": {
     "pickedUp": "Picked up “{{title}}”. Use the arrow keys to move and space to drop.",
@@ -99,7 +104,11 @@
     "empty": "No sessions in this season yet.",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
-    "today": "Today"
+    "today": "Today",
+    "saveAsTemplate": "Save the season as a template",
+    "export": "Export the season",
+    "delete": "Delete the season",
+    "confirmDelete": "Move the season “{{name}}” and its sessions to the trash?"
   },
   "save": {
     "saved": "Saved",
@@ -327,5 +336,199 @@
         "instructions": "## How\n- Walk through the game's offensive plays 5 on 0, then against passive defence.\n- Repeat substitutions and special situations (side inbounds, last seconds).\n\n## Coaching points\n- Everyone knows their role in every play."
       }
     }
+  },
+  "nav": {
+    "start": "Home",
+    "library": "Library",
+    "menu": "Menu",
+    "main": "Main menu"
+  },
+  "library": {
+    "title": "Library",
+    "tabs": {
+      "seasons": "Seasons",
+      "sessions": "Sessions",
+      "drills": "Drills",
+      "templates": "Templates",
+      "trash": "Trash"
+    },
+    "search": "Search",
+    "searchPlaceholder": "Search title and text",
+    "allTags": "All tags",
+    "allBlockTypes": "All block types",
+    "allSeasons": "All seasons",
+    "noSeason": "No season",
+    "allKinds": "All kinds",
+    "sort": "Sort",
+    "sortUpdated": "Last changed",
+    "sortName": "Name",
+    "showArchived": "Show archived",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "empty": "Nothing here yet.",
+    "noResults": "No results. Try another search or clear the filter.",
+    "newSeason": "New season",
+    "newSession": "New session",
+    "newDrill": "New drill",
+    "open": "Open",
+    "duplicate": "Duplicate",
+    "move": "Move to season",
+    "archive": "Archive",
+    "unarchive": "Take out of the archive",
+    "archived": "Archived",
+    "delete": "Delete",
+    "exportJson": "Export JSON",
+    "saveAsTemplate": "Save as template",
+    "use": "Use",
+    "builtIn": "Built-in",
+    "kinds": {
+      "season": "Season",
+      "session": "Session",
+      "drill": "Drill",
+      "template": "Template"
+    },
+    "minutes": "{{minutes}} min",
+    "movedToTrash": "“{{title}}” was moved to the trash.",
+    "archivedToast": "“{{title}}” was archived.",
+    "moved": "The session was moved to {{season}}.",
+    "exported": "The file “{{file}}” was downloaded.",
+    "trash": {
+      "info": "Deleted items stay here for 30 days and are then removed for good.",
+      "restore": "Restore",
+      "deleteForever": "Delete for good",
+      "empty": "Empty the trash",
+      "confirmEmpty": "Delete everything in the trash for good? This can't be undone.",
+      "confirmDeleteForever": "Delete “{{title}}” for good? This can't be undone.",
+      "daysLeft_one": "{{count}} day left",
+      "daysLeft_other": "{{count}} days left",
+      "nothing": "The trash is empty.",
+      "restored": "“{{title}}” was restored."
+    }
+  },
+  "drill": {
+    "untitled": "New drill",
+    "notFound": "This drill doesn't exist. It may have been deleted.",
+    "loading": "Loading drill…",
+    "title": "Title",
+    "defaultDuration": "Default length (min)",
+    "tags": "Tags",
+    "tagsHint": "Separate tags with commas, e.g. shooting, transition",
+    "type": "Block type",
+    "back": "To the Library",
+    "saveToLibrary": "Save in the Library",
+    "savedToLibrary": "“{{title}}” was saved in the Library."
+  },
+  "templates": {
+    "saveTitle": "Save as template",
+    "name": "Name",
+    "description": "Description",
+    "tags": "Tags",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "The template “{{name}}” was saved.",
+    "useTitle": "Use “{{name}}”",
+    "create": "Create",
+    "season": "Season",
+    "noSeason": "No season (stand-alone)",
+    "date": "Date",
+    "startTime": "Start time",
+    "seasonName": "Season name",
+    "startDate": "Start date",
+    "weekdays": "Weekdays",
+    "weekdaysHint": "{{weeks}} weeks · {{count}} sessions",
+    "needWeekday": "Choose at least one weekday.",
+    "drillInfo": "The drill is added to the Library as a copy you can change.",
+    "copyInfo": "The template is not changed – you get your own copy.",
+    "open": "Open template",
+    "kind": {
+      "season": "Season template",
+      "session": "Session template",
+      "drill": "Drill template"
+    }
+  },
+  "toast": {
+    "close": "Close",
+    "open": "Open",
+    "undo": "Undo"
+  },
+  "menu": {
+    "title": "Menu",
+    "export": "Export data",
+    "import": "Import data",
+    "clearAll": "Clear everything",
+    "language": "Language",
+    "data": "Data"
+  },
+  "export": {
+    "title": "Export data",
+    "scope": "What do you want to export?",
+    "all": "Everything",
+    "library": "The whole Library (seasons, sessions and drills)",
+    "templates": "Own templates",
+    "season": "One season",
+    "session": "One session",
+    "choose": "Choose…",
+    "submit": "Export",
+    "nothing": "There is nothing to export.",
+    "allTitle": "everything",
+    "libraryTitle": "library",
+    "templatesTitle": "templates"
+  },
+  "import": {
+    "title": "Import data",
+    "choose": "Choose file",
+    "drop": "or drop a JSON file anywhere in the app",
+    "sessionplanLabel": "Paste a sessionplan link or sessionplan JSON",
+    "sessionplanButton": "Read",
+    "reading": "Reading…",
+    "preview": "The file contains:",
+    "fromSessionplan": "A session from sessionplan: “{{title}}”",
+    "counts": {
+      "seasons_one": "{{count}} season",
+      "seasons_other": "{{count}} seasons",
+      "sessions_one": "{{count}} session",
+      "sessions_other": "{{count}} sessions",
+      "drills_one": "{{count}} drill",
+      "drills_other": "{{count}} drills",
+      "templates_one": "{{count}} template",
+      "templates_other": "{{count}} templates",
+      "images_one": "{{count}} image",
+      "images_other": "{{count}} images"
+    },
+    "mode": "How should the items be added?",
+    "copies": "Add as copies (new ids)",
+    "replace": "Replace existing items with the same id",
+    "submit": "Import",
+    "done": "Import finished: {{summary}}.",
+    "dropAnywhere": "Drop the file to import it",
+    "errors": {
+      "invalidJson": "The file is not valid JSON.",
+      "notBasketapp": "The file is not a Basketapp file (the “format” field is missing).",
+      "unknownVersion": "The file comes from a newer version of Basketapp (version {{version}}). Update the app and try again.",
+      "invalid": "The file has the wrong content ({{detail}}).",
+      "sessionplan": "The sessionplan link or file couldn't be read.",
+      "empty": "The file contains nothing to import.",
+      "read": "The file couldn't be read."
+    }
+  },
+  "clearAll": {
+    "title": "Clear everything",
+    "warning": "Everything saved in this browser is deleted: seasons, sessions, drills, templates and images. This can't be undone.",
+    "exportFirst": "Export everything first",
+    "confirm": "Clear everything",
+    "done": "Everything was cleared."
+  },
+  "panel": {
+    "open": "From library",
+    "title": "From the Library",
+    "close": "Close the panel",
+    "search": "Search drills",
+    "drills": "My drills",
+    "templates": "Drill templates",
+    "add": "Add",
+    "added": "“{{title}}” was added to the session.",
+    "empty": "No results.",
+    "dragHint": "Drag into the session or click Add. The drill is added as a copy.",
+    "dropHere": "Drop here to add at the end"
   }
 }

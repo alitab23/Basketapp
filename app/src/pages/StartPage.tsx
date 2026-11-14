@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Plus } from 'lucide-react';
+import { LayoutTemplate, Plus } from 'lucide-react';
 import { db } from '../db/schema';
 import { createSeason, createSession, listAllSessions, listSeasons } from '../db/repository';
 import { blockCount, formatRelative, totalMinutes } from '../lib/time';
@@ -48,6 +48,9 @@ export function StartPage() {
         <button type="button" onClick={() => void handleNewSeason()} className={ui.secondary}>
           <Plus className="h-4 w-4" aria-hidden="true" /> {t('start.newSeason')}
         </button>
+        <Link to="/bibliotek?tab=templates" className={ui.secondary}>
+          <LayoutTemplate className="h-4 w-4" aria-hidden="true" /> {t('start.openTemplate')}
+        </Link>
       </div>
 
       <section aria-labelledby="recent-heading" className="space-y-3">
