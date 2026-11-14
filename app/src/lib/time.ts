@@ -34,3 +34,11 @@ export function formatRelative(thenIso: string, now: Date, locale: string): stri
   }
   return rtf.format(0, 'second');
 }
+
+/** "1 h 20 min", "2 h" or "45 min" as plain text (for exports); `Duration` is the same in React. */
+export function formatMinutes(total: number, t: (key: string, options?: Record<string, unknown>) => string): string {
+  const { hours, minutes } = splitMinutes(total);
+  if (hours === 0) return t('duration.minutes', { minutes });
+  if (minutes === 0) return t('duration.hours', { hours });
+  return t('duration.hoursMinutes', { hours, minutes });
+}

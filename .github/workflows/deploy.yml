@@ -1,0 +1,97 @@
+# Tests, builds and deploys the app to Loopia on every push to main (SPEC.md section 9).
+# Hosting step 1: only the static app. The API and database migrations are added in step 2.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   LOOPIA_SSH_KEY   private SSH key whose public key is added to the Loopia SSH user
+#   LOOPIA_SSH       SSH login, e.g. user@ssh.loopia.se
+#   LOOPIA_PATH      folder on the server, e.g. basketapp.se/public_html
+# Without the secrets the tests still run; only the deploy job is skipped.
+name: Test and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            app/package-lock.json
+            e2e/package-lock.json
+      - name: Install app
+        run: npm ci
+        working-directory: app
+      - name: Unit tests
+        run: npm test
+        working-directory: app
+      - name: Build
+        run: npm run build
+        working-directory: app
+      - name: Install Playwright
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: End-to-end tests
+        run: npx playwright test
+        working-directory: e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: e2e/playwright-report
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: app/dist
+          retention-days: 7
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: app/dist
+      - name: Check secrets
+        id: secrets
+        env:
+          KEY: ${{ secrets.LOOPIA_SSH_KEY }}
+        run: echo "ready=$([ -n "$KEY" ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+      - name: Set up SSH
+        if: steps.secrets.outputs.ready == 'yes'
+        env:
+          KEY: ${{ secrets.LOOPIA_SSH_KEY }}
+          LOOPIA_SSH: ${{ secrets.LOOPIA_SSH }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "${LOOPIA_SSH#*@}" >> ~/.ssh/known_hosts
+      - name: Deploy
+        if: steps.secrets.outputs.ready == 'yes'
+        env:
+          LOOPIA_SSH: ${{ secrets.LOOPIA_SSH }}
+          LOOPIA_PATH: ${{ secrets.LOOPIA_PATH }}
+        run: SSH_OPTS="-i $HOME/.ssh/id_deploy -o IdentitiesOnly=yes" deploy/deploy.sh --skip-build
+      - name: No secrets yet
+        if: steps.secrets.outputs.ready != 'yes'
+        run: echo "::notice::LOOPIA_SSH_KEY is not set, so nothing was deployed. See deploy/README.md."

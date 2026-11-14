@@ -14,7 +14,7 @@ Så här ska specifikationen användas: ge hela dokumentet till en AI-kodassiste
 - Blocktyper med namn, ikon och färg (t.ex. Föreläsning blå #3B82F6, Övning grön #22C55E, Paus grå #6B7280, Diskussion orange #F97316, Energizer lila #A855F7).
 - Varje block: titel, längd i minuter, blocktyp, anteckningar i markdown och material.
 - Start- och sluttid per block räknas fram från passets starttid och blockens längder; totaltiden visas.
-- Hela passet kan delas som en länk där datan ligger komprimerad i URL:en (`#data=v2:` + lz-string).
+- Hela passet kan delas som en länk där datan ligger komprimerad i URL:en (`#data=v2:` + lz-string). Basketappens egna länkar använder `#data=v1:` (avsnitt 7); `v2` är sessionplans format.
 
 **Mer som sessionplan har och som basketappen ska ha på samma sätt:**
 
@@ -370,19 +370,22 @@ Extra: kunna importera en sessionplan-länk eller sessionplan-JSON (fälten work
 **Övrig export**
 
 - PDF: se “Snygg PDF av ett pass” nedan.
-- CSV: en rad per block med start, slut, titel, blocktyp, minuter och instruktion.
+- CSV: en rad per block med start, slut, titel, blocktyp, minuter och instruktion. Semikolon som avgränsare och UTF-8 med BOM, så att svenska Excel öppnar filen rätt. Rubrikrader följer med på sin plats med bara starttid och titel. En säsong får även kolumnerna datum och pass.
 - PNG/SVG av en enskild ritning.
 - Delningslänk: passet komprimerat i URL:en som i sessionplan (`#data=v1:` + lz-string). Blir länken för lång (många ritningar) sparas passet krypterat på servern och länken innehåller bara id och nyckel.
+  - Utan server (byggsteg 5): en länk är högst 8 000 tecken. Blir den längre lämnas fotona utan att ritningarna påverkas, och användaren får veta det. Blir den ändå för lång föreslås JSON-fil eller PDF. Lagring på servern kommer med servern i byggsteg 6.
+  - Den som öppnar länken ser importens förhandsvisning och får alltid en kopia; ett pass öppnas direkt.
+  - Delningslänk finns i passvyn och på posterna i Biblioteket (inte för inbyggda templates).
 - Skrivskyddad länk till ett lagpass som fungerar utan inloggning och kan stängas av.
 
 **Snygg PDF av ett pass**
 
 Ett pass med flera övningar ska bli en PDF som ser professionell ut och går att dela ut till tränare och spelare direkt. PDF:en skapas i webbläsaren (t.ex. med @react-pdf/renderer) och inte via webbläsarens utskriftsdialog, så att den ser likadan ut i alla webbläsare.
 
-1. **Första sidan:** lagnamn och logotyp, passets titel, datum, tid (t.ex. 18:00–19:30), hall, ansvarig tränare och tema. Därunder tidtabellen: klockslag, övning, blocktyp som färgmarkering och minuter, med totaltid sist.
+1. **Första sidan:** lagnamn och logotyp (när passet hör till ett lag, från byggsteg 6), passets titel, datum, tid (t.ex. 18:00–19:30), hall, ansvarig tränare och tema. Därunder tidtabellen: klockslag, övning, blocktyp som färgmarkering och minuter, med totaltid sist.
 2. **En sektion per övning:** rubrik med nummer, klockslag och längd; blocktypens färg som kantlinje; instruktioner med rubriker och punktlistor; material och antal spelare.
 3. **Bilderna:** alla ritningar och foton i övningen i ett rutnät, 1, 2 eller 3 per rad (väljs vid export), med bildtext. Ritningarna är vektorgrafik, så de blir skarpa även utskrivna.
-4. **Sidbrytning:** en övning delas aldrig mitt i en bild; får den inte plats börjar den på ny sida.
+4. **Sidbrytning:** en övning delas aldrig mitt i en bild; får bilden inte plats börjar den på ny sida. Bilderna ligger i rader som aldrig delas, och en övnings rubrik blir aldrig ensam längst ner på en sida. Planen ritas alltid vit i PDF:en (planfärgen "vit för utskrift", avsnitt 5).
 5. **Sidhuvud och sidfot:** passets titel och datum i huvudet, “Sida 2 av 6” i foten.
 
 Exportdialogen har en förhandsvisning och dessa val: A4 stående eller liggande; färg eller svartvitt; med eller utan instruktioner (bara tidtabell + bilder); 1–3 bilder per rad; språk svenska eller engelska. Ett pass med 10 övningar och 20 bilder ska ta högst 3 sekunder att skapa. Samma mall används för att exportera en hel säsong som en PDF (ett pass per avsnitt).

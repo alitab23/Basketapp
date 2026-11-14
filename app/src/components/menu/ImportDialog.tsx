@@ -25,7 +25,7 @@ export function useCountsText() {
  * sessionplan link; it is checked in a Web Worker, a preview shows what it
  * contains, and the user picks copies (default) or replace.
  */
-export function ImportDialog({ onClose, initialFile }: { onClose: () => void; initialFile?: File }) {
+export function ImportDialog({ onClose, initialFile, initialText }: { onClose: () => void; initialFile?: File; initialText?: string }) {
   const { t } = useTranslation();
   const toast = useToast();
   const navigate = useNavigate();
@@ -43,7 +43,9 @@ export function ImportDialog({ onClose, initialFile }: { onClose: () => void; in
       : e.code === 'invalid'
         ? e.detail === 'sessionplan'
           ? t('import.errors.sessionplan')
-          : t('import.errors.invalid', { detail: e.detail })
+          : e.detail === 'link'
+            ? t('import.errors.link')
+            : t('import.errors.invalid', { detail: e.detail })
         : t(`import.errors.${e.code}`);
 
   async function read(text: string) {
@@ -66,14 +68,20 @@ export function ImportDialog({ onClose, initialFile }: { onClose: () => void; in
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialFile]);
 
+  useEffect(() => {
+    if (initialText) void read(initialText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialText]);
+
   async function run() {
     if (!result?.ok) return;
     setBusy(true);
-    const { counts, sessionIds } = await applyImport(db, result.file, result.source === 'sessionplan' ? 'copies' : mode);
+    // A link always gives a copy: whoever opens it must never overwrite their own.
+    const { counts, sessionIds } = await applyImport(db, result.file, result.source === 'basketapp' ? mode : 'copies');
     toast(t('import.done', { summary: countsText(counts) }));
     onClose();
-    // A sessionplan import is one session: open it straight away.
-    if (result.source === 'sessionplan' && sessionIds[0]) void navigate(`/pass/${sessionIds[0]}`);
+    // A sessionplan import or a shared session is one session: open it straight away.
+    if (result.source !== 'basketapp' && result.file.sessions.length === 1 && sessionIds[0]) void navigate(`/pass/${sessionIds[0]}`);
   }
 
   return (
@@ -135,7 +143,11 @@ export function ImportDialog({ onClose, initialFile }: { onClose: () => void; in
         <div className="space-y-3 rounded-lg bg-slate-50 p-3 dark:bg-slate-900" data-testid="import-preview">
           <p className="text-sm">
             <span className="font-medium">{t('import.preview')}</span>{' '}
-            {result.source === 'sessionplan' ? t('import.fromSessionplan', { title: result.title }) : countsText(result.counts)}
+            {result.source === 'sessionplan'
+              ? t('import.fromSessionplan', { title: result.title })
+              : result.source === 'link'
+                ? `${t('import.fromLink', { title: result.title ?? '' })} – ${countsText(result.counts)}`
+                : countsText(result.counts)}
           </p>
           {result.source === 'basketapp' && (
             <fieldset className="space-y-1">

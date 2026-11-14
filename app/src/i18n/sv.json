@@ -46,7 +46,10 @@
     "redo": "Gör om",
     "empty": "Passet är tomt. Lägg till en övning, en paus eller en rubrik.",
     "saveAsTemplate": "Spara passet som template",
-    "export": "Exportera passet"
+    "export": "Exportera passet",
+    "pdf": "Exportera passet som PDF",
+    "csv": "Exportera passet som kalkylark (CSV)",
+    "share": "Dela passet som länk"
   },
   "block": {
     "addDrill": "Övning",
@@ -108,7 +111,9 @@
     "saveAsTemplate": "Spara säsongen som template",
     "export": "Exportera säsongen",
     "delete": "Radera säsongen",
-    "confirmDelete": "Flytta säsongen ”{{name}}” och dess pass till papperskorgen?"
+    "confirmDelete": "Flytta säsongen ”{{name}}” och dess pass till papperskorgen?",
+    "pdf": "Exportera säsongen som PDF",
+    "csv": "Exportera säsongen som kalkylark (CSV)"
   },
   "save": {
     "saved": "Sparat",
@@ -235,7 +240,11 @@
       "position": "{{n}} av {{total}}"
     },
     "moveItem": "Flytta ”{{name}}”",
-    "thumbnail": "Miniatyr av ritningen"
+    "thumbnail": "Miniatyr av ritningen",
+    "download": {
+      "png": "Ladda ner ritningen som PNG",
+      "svg": "Ladda ner ritningen som SVG (vektor)"
+    }
   },
   "builtin": {
     "tags": {
@@ -403,7 +412,8 @@
       "daysLeft_other": "{{count}} dagar kvar",
       "nothing": "Papperskorgen är tom.",
       "restored": "”{{title}}” återställdes."
-    }
+    },
+    "share": "Dela länk"
   },
   "drill": {
     "untitled": "Ny övning",
@@ -457,7 +467,9 @@
     "import": "Importera data",
     "clearAll": "Rensa allt",
     "language": "Språk",
-    "data": "Data"
+    "data": "Data",
+    "pdf": "Exportera som PDF",
+    "csv": "Exportera som kalkylark (CSV)"
   },
   "export": {
     "title": "Exportera data",
@@ -508,8 +520,10 @@
       "invalid": "Filen har fel innehåll ({{detail}}).",
       "sessionplan": "Det gick inte att läsa sessionplan-länken eller -filen.",
       "empty": "Filen innehåller inget att importera.",
-      "read": "Filen kunde inte läsas."
-    }
+      "read": "Filen kunde inte läsas.",
+      "link": "Länken är trasig eller ofullständig. Be om en ny länk."
+    },
+    "fromLink": "Delat via länk: ”{{title}}”"
   },
   "clearAll": {
     "title": "Rensa allt",
@@ -530,5 +544,60 @@
     "empty": "Inga träffar.",
     "dragHint": "Dra in i passet eller klicka på Lägg till. Övningen läggs in som en kopia.",
     "dropHere": "Släpp här för att lägga till sist"
+  },
+  "csv": {
+    "start": "Start",
+    "end": "Slut",
+    "title": "Titel",
+    "blockType": "Blocktyp",
+    "minutes": "Minuter",
+    "instructions": "Instruktion",
+    "date": "Datum",
+    "session": "Pass"
+  },
+  "pdf": {
+    "title": "Exportera som PDF",
+    "schedule": "Tidtabell",
+    "time": "Tid",
+    "drill": "Övning",
+    "type": "Blocktyp",
+    "minutes": "Längd",
+    "page": "Sida {{page}} av {{total}}",
+    "orientation": "Sidformat",
+    "portrait": "A4 stående",
+    "landscape": "A4 liggande",
+    "color": "Färger",
+    "colorOn": "Färg",
+    "colorOff": "Svartvitt",
+    "content": "Innehåll",
+    "withInstructions": "Med instruktioner",
+    "withoutInstructions": "Bara tidtabell och bilder",
+    "perRow": "Bilder per rad",
+    "language": "Språk i PDF:en",
+    "preview": "Förhandsvisning",
+    "making": "Skapar PDF…",
+    "download": "Ladda ner PDF",
+    "error": "PDF:en kunde inte skapas ({{detail}}).",
+    "target": "Vad vill du exportera?",
+    "session": "Ett pass",
+    "season": "En säsong",
+    "choose": "Välj…",
+    "done": "{{file}} är nedladdad."
+  },
+  "csvExport": {
+    "title": "Exportera som kalkylark (CSV)",
+    "info": "En rad per block med start, slut, titel, blocktyp, minuter och instruktion. Filen öppnas i Excel, Numbers och Google Kalkylark.",
+    "submit": "Ladda ner CSV",
+    "done": "{{file}} är nedladdad."
+  },
+  "share": {
+    "button": "Dela länk",
+    "title": "Dela länk",
+    "info": "Hela passet ligger i länken, även ritningarna. Den som öppnar länken får en egen kopia i sin webbläsare – ingenting sparas på någon server.",
+    "noPhotos": "Fotona är inte med, eftersom länken annars blir för lång. Ritningarna är med. Skicka en JSON-fil eller PDF om fotona behövs.",
+    "tooLong": "Det här är för stort för en länk. Exportera som JSON-fil eller PDF i stället.",
+    "link": "Länk",
+    "copy": "Kopiera länk",
+    "copied": "Länken är kopierad."
   }
 }

@@ -1,0 +1,57 @@
+# Basketapp – .htaccess for public_html on Loopia (Apache 2.4), SPEC.md section 9.
+# deploy.sh copies this file to public_html/.htaccess.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset utf-8
+
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType text/javascript .js .mjs
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always HTTPS (Loopia may sit behind a proxy that sets X-Forwarded-Proto).
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # The PHP API (step 6) and uploaded files are handled by their own folders.
+  RewriteRule ^(api|uploads)(/|$) - [L]
+
+  # Existing files (assets, icons, sw.js) are served as they are.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # A missing file under /assets/ is a real 404, not the app (avoids caching
+  # index.html as JavaScript after a deploy).
+  RewriteRule ^assets/ - [R=404,L]
+
+  # Every app path (/pass/…, /sasong/…, /bibliotek …) gets the app.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # File names under /assets/ contain a hash, so they never change: cache for a year.
+  <If "%{REQUEST_URI} =~ m#^/assets/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  # These must always be checked again, or users get stuck on an old version.
+  <FilesMatch "^(index\.html|sw\.js|registerSW\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <If "%{REQUEST_URI} !~ m#^/assets/# && %{REQUEST_URI} !~ m#\.[a-z0-9]+$#">
+    # App paths answered with index.html.
+    Header set Cache-Control "no-cache"
+  </If>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json application/manifest+json image/svg+xml
+</IfModule>

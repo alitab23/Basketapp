@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Expand, ImagePlus, Plus, Trash2 } from 'lucide-react';
+import { Expand, FileImage, ImageDown, ImagePlus, Plus, Trash2 } from 'lucide-react';
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext, sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -9,6 +9,7 @@ import { db } from '../../db/schema';
 import { putImage } from '../../db/repository';
 import { newId } from '../../lib/id';
 import { CourtView } from '../../drawing/CourtView';
+import { useCourtStyle } from '../../drawing/courtStyle';
 import { copyDiagram, newDiagram } from '../../drawing/elements';
 import { isAcceptedImage, processImage } from '../../drawing/images';
 import { useImageUrl } from '../../drawing/useImageUrl';
@@ -34,6 +35,7 @@ export function DrawingSection({ block, onChange }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const [courtStyle] = useCourtStyle();
 
   const { diagrams, images } = block;
   const active = diagrams.find((d) => d.id === activeId) ?? diagrams[0];
@@ -209,6 +211,21 @@ export function DrawingSection({ block, onChange }: Props) {
               value={active.caption ?? ''}
               onChange={(e) => setDiagrams(diagrams.map((d) => (d.id === active.id ? { ...d, caption: e.target.value || undefined } : d)), `caption:${active.id}`)}
             />
+            {(['png', 'svg'] as const).map((format) => (
+              <button
+                key={format}
+                type="button"
+                className={ui.icon}
+                onClick={async () => {
+                  const { downloadDiagram } = await import('../../drawing/exportDiagram');
+                  await downloadDiagram(active, format, courtStyle, `${block.title} ${stepName(activeIndex)}`);
+                }}
+                aria-label={t(`drawing.download.${format}`)}
+                title={t(`drawing.download.${format}`)}
+              >
+                {format === 'png' ? <ImageDown className="h-4 w-4" aria-hidden="true" /> : <FileImage className="h-4 w-4" aria-hidden="true" />}
+              </button>
+            ))}
             <button type="button" className={ui.icon} onClick={() => deleteDiagram(active, activeIndex)} aria-label={t('drawing.deleteDiagram')} title={t('drawing.deleteDiagram')}>
               <Trash2 className="h-4 w-4" aria-hidden="true" />
             </button>

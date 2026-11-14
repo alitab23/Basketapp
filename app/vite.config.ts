@@ -38,6 +38,11 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    // The PDF worker (react-pdf, about 450 KB gzipped) is the one large file; it loads
+    // only when a PDF is made and is cached for offline use.
+    chunkSizeWarningLimit: 1300,
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

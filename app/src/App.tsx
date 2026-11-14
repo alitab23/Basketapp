@@ -54,6 +54,8 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropping, setDropping] = useState(false);
   const [importFile, setImportFile] = useState<File | null>(null);
+  // A share link (`#data=v1:…`) opens the import preview (SPEC.md section 7).
+  const [importText, setImportText] = useState<string | null>(() => (window.location.hash.startsWith('#data=') ? window.location.href : null));
 
   useEffect(() => {
     void ensureDefaults(db, (key) => i18n.t(key));
@@ -140,7 +142,20 @@ export default function App() {
             </div>
           )}
 
-          <AppMenu open={menuOpen} onClose={() => setMenuOpen(false)} importFile={importFile} onImportFileHandled={() => setImportFile(null)} />
+          <AppMenu
+            open={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            importFile={importFile}
+            importText={importText}
+            onImportFileHandled={() => {
+              setImportFile(null);
+              if (importText) {
+                setImportText(null);
+                // Leave the link data out of the address bar and the history.
+                if (window.location.hash.startsWith('#data=')) window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
+              }
+            }}
+          />
           <PwaPrompt />
         </div>
       </ToastProvider>

@@ -2,12 +2,13 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Calendar, Copy, Download, LayoutTemplate, List, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Copy, Download, FileSpreadsheet, FileText, LayoutTemplate, List, Plus, Trash2 } from 'lucide-react';
 import { db } from '../db/schema';
 import { createSession, duplicateSession, getSeason, listSeasonSessions, moveSession, moveToTrash, restoreFromTrash, updateSeason } from '../db/repository';
 import { buildExport, downloadExport } from '../exchange/export';
 import { seasonTemplateOf } from '../templates/apply';
 import { SaveTemplateDialog } from '../components/templates/SaveTemplateDialog';
+import { OutputDialog, type OutputKind } from '../components/output/OutputDialog';
 import { useToast } from '../components/Toast';
 import { calculateSchedule } from '../lib/schedule';
 import { blockCount, totalMinutes } from '../lib/time';
@@ -28,6 +29,7 @@ export function SeasonPage() {
   const [view, setView] = useState<View>('list');
   const [moved, setMoved] = useState<{ id: string; from?: string; to: string } | null>(null);
   const [saveTemplate, setSaveTemplate] = useState(false);
+  const [output, setOutput] = useState<OutputKind | null>(null);
   const toast = useToast();
 
   if (season === undefined) return null;
@@ -93,6 +95,12 @@ export function SeasonPage() {
           <button type="button" className={ui.icon} onClick={() => setSaveTemplate(true)} aria-label={t('season.saveAsTemplate')} title={t('season.saveAsTemplate')}>
             <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
           </button>
+          <button type="button" className={ui.icon} onClick={() => setOutput('pdf')} aria-label={t('season.pdf')} title={t('season.pdf')}>
+            <FileText className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" className={ui.icon} onClick={() => setOutput('csv')} aria-label={t('season.csv')} title={t('season.csv')}>
+            <FileSpreadsheet className="h-4 w-4" aria-hidden="true" />
+          </button>
           <button type="button" className={ui.icon} onClick={() => void handleExport()} aria-label={t('season.export')} title={t('season.export')}>
             <Download className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -149,6 +157,7 @@ export function SeasonPage() {
         }} />
       )}
 
+      <OutputDialog kind={output} target={{ kind: 'season', id }} onClose={() => setOutput(null)} />
       {saveTemplate && (
         <SaveTemplateDialog kind="season" defaultName={season.name} content={() => seasonTemplateOf(season, sessions)} onClose={() => setSaveTemplate(false)} />
       )}
