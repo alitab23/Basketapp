@@ -111,6 +111,19 @@ export function compareByDate(a: Session, b: Session): number {
   return a.startTime.localeCompare(b.startTime) || a.title.localeCompare(b.title);
 }
 
+// ---------- Images ----------
+
+/** Stores image data and returns its id (ImageAttachment.localBlobId). */
+export async function putImage(db: BasketappDB, blob: Blob): Promise<string> {
+  const id = newId();
+  await db.images.put({ id, blob, createdAt: now() });
+  return id;
+}
+
+export async function getImageBlob(db: BasketappDB, id: string): Promise<Blob | undefined> {
+  return (await db.images.get(id))?.blob;
+}
+
 // ---------- Seasons ----------
 
 export async function createSeason(

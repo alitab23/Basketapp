@@ -6,6 +6,7 @@ import type { ScheduleRow } from '../../lib/schedule';
 import { MAX_DURATION } from '../../lib/blockOps';
 import { markdownExcerpt } from '../../lib/text';
 import { BlockTypeIcon } from '../BlockTypeIcon';
+import { CourtView } from '../../drawing/CourtView';
 import { Duration } from '../Duration';
 import { ui } from '../ui';
 
@@ -169,8 +170,15 @@ function DrillRow({ block, row, blockTypes, expanded, onToggle, onChange, onDura
         </div>
       </div>
 
-      {!expanded && excerpt && (
-        <p className="line-clamp-2 px-3 pb-2 pl-12 text-sm text-slate-500 dark:text-slate-400">{excerpt}</p>
+      {!expanded && (excerpt || block.diagrams.length > 0) && (
+        <div className="flex items-start gap-3 px-3 pb-2 pl-12">
+          {block.diagrams[0] && (
+            <button type="button" onClick={onToggle} className="shrink-0 rounded border border-slate-200 dark:border-slate-700" aria-label={t('drawing.thumbnail')}>
+              <CourtView diagram={block.diagrams[0]} className="h-16 w-auto" />
+            </button>
+          )}
+          {excerpt && <p className="line-clamp-2 text-sm text-slate-500 dark:text-slate-400">{excerpt}</p>}
+        </div>
       )}
 
       {expanded && (
