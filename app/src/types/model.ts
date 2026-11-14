@@ -52,6 +52,8 @@ export type CourtElement =
       label?: string;
       color?: string;
       rotation?: number;
+      /** Ball only: id of the player the ball follows. */
+      attachedTo?: string;
     }
   | {
       id: string;
