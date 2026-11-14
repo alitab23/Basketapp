@@ -88,6 +88,7 @@ interface Season {
   startDate: string; endDate: string;
   description?: string;
   archived: boolean;
+  deletedAt?: string;        // i papperskorgen sedan; tas bort efter 30 dagar
   updatedAt: string;
 }
 
@@ -110,6 +111,8 @@ interface Session {          // ett träningspass
   maxDuration?: number;      // valfri maxtid för hallen i minuter; varning om passet blir längre
   items: Block[];            // ordnad lista
   fromTemplateId?: string;
+  archived?: boolean;
+  deletedAt?: string;        // i papperskorgen sedan; tas bort efter 30 dagar
   updatedAt: string; updatedBy?: string;
 }
 
@@ -151,6 +154,8 @@ interface Drill {            // sparad övning i Biblioteket
   instructions: string; material?: string; playersNeeded?: string;
   diagrams: Diagram[];
   images: ImageAttachment[];
+  archived?: boolean;
+  deletedAt?: string;        // i papperskorgen sedan; tas bort efter 30 dagar
   updatedAt: string;
 }
 
@@ -161,6 +166,8 @@ interface Template {         // färdig utgångspunkt, kopieras vid användning
   kind: "season" | "session" | "drill";
   name: string; description?: string; tags: string[];
   content: SeasonTemplate | Omit<Session, "id" | "teamId" | "seasonId"> | Omit<Drill, "id" | "teamId">;
+  deletedAt?: string;        // i papperskorgen sedan; tas bort efter 30 dagar
+  updatedAt?: string;
 }
 
 interface SeasonTemplate {   // t.ex. "U14, 2 pass/vecka, 90 min"

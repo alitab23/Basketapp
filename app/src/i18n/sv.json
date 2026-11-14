@@ -227,5 +227,105 @@
     },
     "moveItem": "Flytta ”{{name}}”",
     "thumbnail": "Miniatyr av ritningen"
+  },
+  "builtin": {
+    "tags": {
+      "layup": "lay-up",
+      "warmup": "uppvärmning",
+      "passing": "passningar",
+      "transition": "transition",
+      "offense": "anfall",
+      "defense": "försvar",
+      "shooting": "skott",
+      "pickandroll": "pick and roll",
+      "session": "pass",
+      "season": "säsong"
+    },
+    "mikan": {
+      "title": "Mikan drill",
+      "description": "Lay-ups med växelvis händer nära korgen.",
+      "caption": "Lay-up höger, ta returen, kliv över och lay-up vänster",
+      "instructions": "## Syfte\nFotarbete, touch och lay-ups med båda händerna nära korgen.\n\n## Organisation\n- En spelare per korg, eller två som turas om.\n- Starta under korgen på höger sida.\n\n## Utförande\n1. Lay-up med höger hand på höger sida.\n2. Ta bollen innan den studsar, kliv över till vänster sida.\n3. Lay-up med vänster hand.\n4. Fortsätt i rytm så länge tiden räcker.\n\n## Coachingpunkter\n- Bollen högt, aldrig ner till midjan.\n- Rätt fot upp: vänster fot vid högerhands lay-up.\n- Använd tavlan.",
+      "material": "1 boll per spelare",
+      "players": "1–2 per korg"
+    },
+    "weave": {
+      "title": "3-man weave",
+      "description": "Passningar i full fart över hela planen.",
+      "caption": "Passa och spring bakom den du passade till",
+      "label": "Fortsätt till korgen",
+      "instructions": "## Syfte\nPassningar i fart, timing och att fylla banor i transition.\n\n## Organisation\n- Tre spelare på baslinjen: vänster, mitten (med boll), höger.\n\n## Utförande\n1. Mitten passar till en kant och springer bakom mottagaren.\n2. Mottagaren går in i mitten och passar till nästa kant.\n3. Fortsätt hela planen och avsluta med lay-up.\n4. Samma tre tillbaka, eller nästa grupp startar.\n\n## Coachingpunkter\n- Passningen framför mottagaren, i full fart.\n- Ingen dribbling.\n- Prata: säg namnet på den du passar.",
+      "material": "1 boll per grupp",
+      "players": "3 per grupp"
+    },
+    "fastbreak": {
+      "title": "2 mot 1 / 3 mot 2 fastbreak",
+      "description": "Kontring med övertal.",
+      "caption": "3 mot 2: bollen i mitten, kanterna fyller brett",
+      "instructions": "## Syfte\nAtt avgöra en kontring i övertal snabbt och säkert.\n\n## Organisation\n- Anfallare startar på egen halva, försvarare väntar vid motståndarnas korg.\n- Börja med 2 mot 1, gå vidare till 3 mot 2.\n\n## Utförande\n1. Bollföraren dribblar i mitten.\n2. Kanterna springer brett och djupt.\n3. Tvinga försvaret att välja, passa till den som blir fri.\n4. Max två passningar innan avslut.\n\n## Coachingpunkter\n- Bollföraren stannar vid frikastlinjen och läser.\n- Håll avstånd – två anfallare ska aldrig kunna täckas av en försvarare.\n- Avsluta med lay-up, inte skott från distans.",
+      "material": "2–3 bollar",
+      "players": "3 mot 2 + väntande"
+    },
+    "shell": {
+      "title": "Shell drill 4 mot 4",
+      "description": "Försvarsplacering vid bollens förflyttning.",
+      "caption": "Bollen passas till hörnet: alla försvarare flyttar samtidigt",
+      "instructions": "## Syfte\nPlacering i hjälpförsvar och att flytta med bollen.\n\n## Organisation\n- Fyra anfallare i en ruta utanför trepoängslinjen, fyra försvarare.\n\n## Utförande\n1. Anfallarna passar runt utan att dribbla.\n2. Försvarna flyttar på varje passning: på bollen, en pass bort, två pass bort.\n3. Lägg till penetration och closeouts när placeringen sitter.\n\n## Coachingpunkter\n- Se både boll och egen spelare.\n- Flytta medan bollen är i luften.\n- Hjälpsidan står i målet (\"i färgen\").",
+      "material": "1 boll",
+      "players": "4 mot 4"
+    },
+    "closeout": {
+      "title": "Closeout-drill",
+      "description": "Försvarare springer ut mot skytt.",
+      "caption": "Tränaren passar till hörnet, försvararen gör closeout",
+      "instructions": "## Syfte\nAtt komma ut mot en skytt under kontroll utan att bli passerad.\n\n## Organisation\n- Tränare med boll vid toppen, anfallare i hörnet, försvarare under korgen.\n\n## Utförande\n1. Tränaren passar till hörnet.\n2. Försvararen sprintar ut, korta steg sista metrarna.\n3. Anfallaren skjuter eller driver; spela 1 mot 1 tills avslut.\n\n## Coachingpunkter\n- Sprint två tredjedelar, sedan korta steg.\n- Hand upp mot bollen, tyngden bakåt.\n- Styr mot baslinjen eller hjälpen.",
+      "material": "Bollar, 1 kon",
+      "players": "1 mot 1 + tränare"
+    },
+    "pnr": {
+      "title": "Pick and roll 2 mot 2",
+      "description": "Screen på bollförare, roll mot korg.",
+      "caption": "Screen, dribbla av screenen, screenaren rullar mot korgen",
+      "instructions": "## Syfte\nGrundläggande pick and roll – läsa försvaret och hitta rätt passning.\n\n## Organisation\n- Bollförare vid toppen, screenare vid armbågen, en försvarare på var.\n\n## Utförande\n1. Screenaren sätter screen på bollförarens försvarare.\n2. Bollföraren dribblar tätt av screenen.\n3. Screenaren rullar mot korgen.\n4. Läs försvaret: skjut, driv eller passa till rullaren.\n\n## Coachingpunkter\n- Vänta på screenen – axel mot axel.\n- Screenaren står stilla, rulla när försvaret vänder.\n- Passa med en studs runt hjälpen.",
+      "material": "1 boll",
+      "players": "2 mot 2"
+    },
+    "standard": {
+      "title": "Standardpass 90 min",
+      "description": "Uppvärmning 15, teknik 20, skott 15, anfall/försvar 25 och spel 15 minuter.",
+      "focus": "Grunder och spel"
+    },
+    "short": {
+      "title": "Kort pass 60 min",
+      "description": "Uppvärmning 10, teknik 15, skott 10 och spel 25 minuter.",
+      "focus": "Tempo och transition"
+    },
+    "gameday": {
+      "title": "Matchdagsförberedelse",
+      "description": "45 minuter: uppvärmning, skott och genomgång av spelsystem.",
+      "focus": "Matchförberedelse"
+    },
+    "season": {
+      "title": "Säsong 2 pass/vecka",
+      "description": "16 veckor med 32 pass baserade på Standardpass 90 min."
+    },
+    "blocks": {
+      "shootingSeries": {
+        "title": "Skottserie från fem positioner",
+        "instructions": "## Utförande\n- Två och två med en boll: en skjuter, en returnerar och passar.\n- Fem skott från vardera hörn, kant och topp, sedan byte.\n\n## Coachingpunkter\n- Redo att skjuta när bollen kommer: fötter, händer, blick.\n- Samma rörelse varje gång."
+      },
+      "scrimmage": {
+        "title": "Spel 5 mot 5",
+        "instructions": "## Utförande\n- Spel på hel plan med dagens tema som regel, t.ex. poäng räknas dubbelt efter pick and roll.\n\n## Coachingpunkter\n- Låt spelet gå; stoppa bara för dagens tema."
+      },
+      "gameShots": {
+        "title": "Matchskott",
+        "instructions": "## Utförande\n- Varje spelare skjuter de skott hen tar i match, i matchtempo.\n- Avsluta med två straffar var.\n\n## Coachingpunkter\n- Kvalitet före antal. Lugnt och säkert."
+      },
+      "systems": {
+        "title": "Genomgång av spelsystem",
+        "instructions": "## Utförande\n- Gå igenom matchens anfallssystem 5 mot 0, sedan mot passivt försvar.\n- Repetera inbyten och specialsituationer (sidinkast, sista sekunderna).\n\n## Coachingpunkter\n- Alla vet sin roll i varje system."
+      }
+    }
   }
 }

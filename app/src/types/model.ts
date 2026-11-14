@@ -27,6 +27,8 @@ export interface Season {
   endDate: string;
   description?: string;
   archived: boolean;
+  /** Set when moved to the trash; removed for good after 30 days. */
+  deletedAt?: string;
   updatedAt: string;
 }
 
@@ -130,6 +132,9 @@ export interface Session {
   maxDuration?: number;
   items: Block[];
   fromTemplateId?: string;
+  archived?: boolean;
+  /** Set when moved to the trash; removed for good after 30 days. */
+  deletedAt?: string;
   updatedAt: string;
   updatedBy?: string;
 }
@@ -146,6 +151,9 @@ export interface Drill {
   playersNeeded?: string;
   diagrams: Diagram[];
   images: ImageAttachment[];
+  archived?: boolean;
+  /** Set when moved to the trash; removed for good after 30 days. */
+  deletedAt?: string;
   updatedAt: string;
 }
 
@@ -168,8 +176,13 @@ export interface Template {
   name: string;
   description?: string;
   tags: string[];
-  content: SeasonTemplate | SessionContent | Omit<Drill, 'id' | 'teamId'>;
+  content: SeasonTemplate | SessionContent | DrillContent;
+  /** Set when moved to the trash; removed for good after 30 days. */
+  deletedAt?: string;
+  updatedAt?: string;
 }
+
+export type DrillContent = Omit<Drill, 'id' | 'teamId'>;
 
 /** Binary image data, referenced from ImageAttachment.localBlobId. */
 export interface StoredImage {

@@ -227,5 +227,105 @@
     },
     "moveItem": "Move “{{name}}”",
     "thumbnail": "Drawing thumbnail"
+  },
+  "builtin": {
+    "tags": {
+      "layup": "layup",
+      "warmup": "warm-up",
+      "passing": "passing",
+      "transition": "transition",
+      "offense": "offense",
+      "defense": "defense",
+      "shooting": "shooting",
+      "pickandroll": "pick and roll",
+      "session": "session",
+      "season": "season"
+    },
+    "mikan": {
+      "title": "Mikan drill",
+      "description": "Layups with alternating hands close to the basket.",
+      "caption": "Right-hand layup, catch the rebound, step across and left-hand layup",
+      "instructions": "## Purpose\nFootwork, touch and layups with both hands close to the basket.\n\n## Organisation\n- One player per basket, or two taking turns.\n- Start under the basket on the right side.\n\n## How\n1. Right-hand layup on the right side.\n2. Catch the ball before it bounces, step across to the left side.\n3. Left-hand layup.\n4. Keep the rhythm going for the whole time.\n\n## Coaching points\n- Keep the ball high, never down to the waist.\n- Right foot up: left foot for a right-hand layup.\n- Use the backboard.",
+      "material": "1 ball per player",
+      "players": "1–2 per basket"
+    },
+    "weave": {
+      "title": "3-man weave",
+      "description": "Passing at full speed over the whole court.",
+      "caption": "Pass and run behind the player you passed to",
+      "label": "Continue to the basket",
+      "instructions": "## Purpose\nPassing at speed, timing and filling lanes in transition.\n\n## Organisation\n- Three players on the baseline: left, middle (with ball), right.\n\n## How\n1. The middle player passes to a wing and runs behind the receiver.\n2. The receiver goes to the middle and passes to the next wing.\n3. Continue the whole court and finish with a layup.\n4. Same three back, or the next group starts.\n\n## Coaching points\n- Pass ahead of the receiver, at full speed.\n- No dribbling.\n- Talk: call the name of the player you pass to.",
+      "material": "1 ball per group",
+      "players": "3 per group"
+    },
+    "fastbreak": {
+      "title": "2 on 1 / 3 on 2 fast break",
+      "description": "Fast break with a numbers advantage.",
+      "caption": "3 on 2: ball in the middle, wings fill wide",
+      "instructions": "## Purpose\nFinishing a fast break with a numbers advantage quickly and safely.\n\n## Organisation\n- Attackers start in their own half, defenders wait at the other basket.\n- Start with 2 on 1, then move on to 3 on 2.\n\n## How\n1. The ball handler dribbles in the middle.\n2. The wings run wide and deep.\n3. Make the defence choose, pass to the open player.\n4. At most two passes before the finish.\n\n## Coaching points\n- The ball handler stops at the free-throw line and reads.\n- Keep spacing – one defender must never cover two attackers.\n- Finish with a layup, not a long shot.",
+      "material": "2–3 balls",
+      "players": "3 on 2 + waiting"
+    },
+    "shell": {
+      "title": "Shell drill 4 on 4",
+      "description": "Defensive positioning as the ball moves.",
+      "caption": "Pass to the corner: all defenders move at the same time",
+      "instructions": "## Purpose\nHelp-side positioning and moving with the ball.\n\n## Organisation\n- Four attackers in a box outside the three-point line, four defenders.\n\n## How\n1. The attackers pass around without dribbling.\n2. The defenders move on every pass: on the ball, one pass away, two passes away.\n3. Add penetration and closeouts once positioning is solid.\n\n## Coaching points\n- See both the ball and your own player.\n- Move while the ball is in the air.\n- Help side stands in the paint.",
+      "material": "1 ball",
+      "players": "4 on 4"
+    },
+    "closeout": {
+      "title": "Closeout drill",
+      "description": "Defender runs out at a shooter.",
+      "caption": "The coach passes to the corner, the defender closes out",
+      "instructions": "## Purpose\nGetting out to a shooter under control without getting beaten.\n\n## Organisation\n- Coach with the ball at the top, attacker in the corner, defender under the basket.\n\n## How\n1. The coach passes to the corner.\n2. The defender sprints out, short steps over the last metres.\n3. The attacker shoots or drives; play 1 on 1 until a finish.\n\n## Coaching points\n- Sprint two thirds, then short steps.\n- Hand up at the ball, weight back.\n- Force towards the baseline or the help.",
+      "material": "Balls, 1 cone",
+      "players": "1 on 1 + coach"
+    },
+    "pnr": {
+      "title": "Pick and roll 2 on 2",
+      "description": "Screen for the ball handler, roll to the basket.",
+      "caption": "Screen, dribble off the screen, the screener rolls to the basket",
+      "instructions": "## Purpose\nBasic pick and roll – read the defence and find the right pass.\n\n## Organisation\n- Ball handler at the top, screener at the elbow, one defender each.\n\n## How\n1. The screener sets a screen on the ball handler's defender.\n2. The ball handler dribbles tight off the screen.\n3. The screener rolls to the basket.\n4. Read the defence: shoot, drive or pass to the roller.\n\n## Coaching points\n- Wait for the screen – shoulder to shoulder.\n- The screener stands still, rolls when the defence turns.\n- Bounce pass around the help.",
+      "material": "1 ball",
+      "players": "2 on 2"
+    },
+    "standard": {
+      "title": "Standard practice 90 min",
+      "description": "Warm-up 15, technique 20, shooting 15, offense/defense 25 and scrimmage 15 minutes.",
+      "focus": "Fundamentals and play"
+    },
+    "short": {
+      "title": "Short practice 60 min",
+      "description": "Warm-up 10, technique 15, shooting 10 and scrimmage 25 minutes.",
+      "focus": "Tempo and transition"
+    },
+    "gameday": {
+      "title": "Game day preparation",
+      "description": "45 minutes: warm-up, shooting and a run-through of plays.",
+      "focus": "Game preparation"
+    },
+    "season": {
+      "title": "Season, 2 practices/week",
+      "description": "16 weeks with 32 practices based on Standard practice 90 min."
+    },
+    "blocks": {
+      "shootingSeries": {
+        "title": "Shooting from five spots",
+        "instructions": "## How\n- In pairs with one ball: one shoots, one rebounds and passes.\n- Five shots from each corner, wing and the top, then switch.\n\n## Coaching points\n- Ready to shoot when the ball arrives: feet, hands, eyes.\n- Same motion every time."
+      },
+      "scrimmage": {
+        "title": "Scrimmage 5 on 5",
+        "instructions": "## How\n- Full-court play with today's theme as a rule, e.g. points count double after a pick and roll.\n\n## Coaching points\n- Let the game flow; stop only for today's theme."
+      },
+      "gameShots": {
+        "title": "Game shots",
+        "instructions": "## How\n- Every player takes the shots they take in games, at game speed.\n- Finish with two free throws each.\n\n## Coaching points\n- Quality over quantity. Calm and sure."
+      },
+      "systems": {
+        "title": "Run-through of plays",
+        "instructions": "## How\n- Walk through the game's offensive plays 5 on 0, then against passive defence.\n- Repeat substitutions and special situations (side inbounds, last seconds).\n\n## Coaching points\n- Everyone knows their role in every play."
+      }
+    }
   }
 }

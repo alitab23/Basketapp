@@ -1,6 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { BasketappDB } from './schema';
 import {
+  clearAll,
+  createDrill,
+  createTemplate,
+  deleteForever,
+  getDrill,
+  listAllSessions,
+  listDrills,
+  listOwnTemplates,
+  listSeasons,
+  listTrash,
+  moveToTrash,
+  purgeTrash,
+  putImage,
+  restoreFromTrash,
+  setArchived,
   createSeason,
   createSession,
   deleteSession,
@@ -148,5 +163,73 @@ describe('seasons', () => {
       'sep 18',
       'utan datum',
     ]);
+  });
+});
+
+describe('trash and archive (SPEC.md section 6)', () => {
+  it('moves a session to the trash and back', async () => {
+    const s = await createSession(db, { title: 'A' });
+    await moveToTrash(db, 'session', s.id);
+    expect(await listAllSessions(db)).toHaveLength(0);
+    expect((await listTrash(db)).map((x) => x.title)).toEqual(['A']);
+    await restoreFromTrash(db, 'session', s.id);
+    expect(await listAllSessions(db)).toHaveLength(1);
+  });
+
+  it('takes a season’s sessions with it and brings them back together', async () => {
+    const season = await createSeason(db, { name: 'S', startDate: '2026-08-01', endDate: '2027-04-30' });
+    const inSeason = await createSession(db, { title: 'I säsongen', seasonId: season.id });
+    const alreadyTrashed = await createSession(db, { title: 'Redan raderat', seasonId: season.id });
+    await moveToTrash(db, 'session', alreadyTrashed.id, '2026-01-01T00:00:00.000Z');
+    await moveToTrash(db, 'season', season.id);
+    expect(await listSeasons(db)).toHaveLength(0);
+    // The season shows in the trash; its sessions are listed under it, not separately.
+    expect((await listTrash(db)).map((x) => x.title)).toEqual(['S', 'Redan raderat']);
+    await restoreFromTrash(db, 'season', season.id);
+    expect((await listSeasonSessions(db, season.id)).map((s) => s.id)).toEqual([inSeason.id]);
+  });
+
+  it('removes items older than 30 days, and photos nobody uses', async () => {
+    const old = await createSession(db, { title: 'Gammal', items: [newBlock({ title: 'x', images: [{ id: 'i', fileName: 'a', mime: 'image/png', width: 1, height: 1, localBlobId: 'blob1' }] })] });
+    const recent = await createDrill(db, { title: 'Ny' });
+    await putImage(db, new Blob(['x']), 'blob1');
+    await putImage(db, new Blob(['y']), 'orphan');
+    await moveToTrash(db, 'session', old.id, '2026-01-01T00:00:00.000Z');
+    await moveToTrash(db, 'drill', recent.id, '2026-02-20T00:00:00.000Z');
+    expect(await db.images.count()).toBe(2);
+
+    const removed = await purgeTrash(db, { at: new Date('2026-02-25T00:00:00.000Z') });
+    expect(removed).toBe(1);
+    expect(await getSession(db, old.id)).toBeUndefined();
+    expect(await getDrill(db, recent.id)).toBeDefined();
+    expect(await db.images.count()).toBe(0);
+  });
+
+  it('archives without deleting', async () => {
+    const d = await createDrill(db, { title: 'D' });
+    await setArchived(db, 'drill', d.id, true);
+    expect(await listDrills(db)).toHaveLength(0);
+    expect((await getDrill(db, d.id))!.archived).toBe(true);
+  });
+
+  it('deletes one trashed item for good', async () => {
+    const tpl = await createTemplate(db, { kind: 'drill', name: 'T', tags: [], content: { title: 'x', tags: [], defaultDuration: 5, instructions: '', diagrams: [], images: [], updatedAt: '' } });
+    await moveToTrash(db, 'template', tpl.id);
+    await deleteForever(db, 'template', tpl.id);
+    expect(await db.templates.count()).toBe(0);
+    expect(await listOwnTemplates(db)).toHaveLength(0);
+  });
+});
+
+describe('clear all', () => {
+  it('empties everything and puts back the default block types', async () => {
+    await createSession(db, { title: 'A' });
+    await createDrill(db, { title: 'B' });
+    await putImage(db, new Blob(['x']));
+    await clearAll(db, identity);
+    expect(await db.sessions.count()).toBe(0);
+    expect(await db.drills.count()).toBe(0);
+    expect(await db.images.count()).toBe(0);
+    expect(await db.blockTypes.count()).toBe(8);
   });
 });
