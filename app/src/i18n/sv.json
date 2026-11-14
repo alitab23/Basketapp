@@ -1,0 +1,51 @@
+{
+  "app": {
+    "name": "Basketapp",
+    "tagline": "Planera träningspass och rita övningar"
+  },
+  "start": {
+    "newSession": "Nytt pass",
+    "recentSessions": "Senast ändrade pass",
+    "empty": "Inga pass ännu. Skapa ditt första pass för att komma igång.",
+    "blocks_one": "{{count}} block",
+    "blocks_other": "{{count}} block",
+    "changed": "ändrad {{when}}",
+    "comingSoon": "Passvyn kommer i nästa steg."
+  },
+  "session": {
+    "untitled": "Nytt pass"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "hours": "{{hours}} h",
+    "minutes": "{{minutes}} min"
+  },
+  "storage": {
+    "local": "Allt sparas lokalt i den här webbläsaren. Inget konto behövs.",
+    "notPersisted": "Webbläsaren kan rensa lokala data om utrymmet tar slut. Exportera regelbundet."
+  },
+  "network": {
+    "offline": "Offline – sparas lokalt"
+  },
+  "pwa": {
+    "offlineReady": "Appen fungerar nu även offline.",
+    "updateAvailable": "En ny version finns.",
+    "reload": "Uppdatera",
+    "close": "Stäng"
+  },
+  "language": {
+    "label": "Språk",
+    "sv": "Svenska",
+    "en": "English"
+  },
+  "blockTypes": {
+    "warmup": "Uppvärmning",
+    "technique": "Teknik / fundamentals",
+    "shooting": "Skott",
+    "offense": "Anfall / spelsystem",
+    "defense": "Försvar",
+    "scrimmage": "Spel / scrimmage",
+    "conditioning": "Kondition",
+    "break": "Paus / vatten"
+  }
+}
