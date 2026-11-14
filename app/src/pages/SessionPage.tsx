@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Copy, Download, Heading, LayoutTemplate, Library, Plus, Redo2, Trash2, Undo2 } from 'lucide-react';
+import { ArrowLeft, Copy, Download, FileSpreadsheet, FileText, Heading, LayoutTemplate, Library, Plus, Redo2, Share2, Trash2, Undo2 } from 'lucide-react';
 import { db } from '../db/schema';
 import { createDrill, duplicateSession, listBlockTypes, listSeasons, moveToTrash, restoreFromTrash } from '../db/repository';
 import { useSessionEditor } from '../hooks/useSessionEditor';
@@ -14,6 +14,7 @@ import { sessionContentOf } from '../templates/apply';
 import { buildExport, downloadExport } from '../exchange/export';
 import { LibraryPanel } from '../components/session/LibraryPanel';
 import { SaveTemplateDialog } from '../components/templates/SaveTemplateDialog';
+import { OutputDialog } from '../components/output/OutputDialog';
 import { useToast } from '../components/Toast';
 import { SessionHeader } from '../components/session/SessionHeader';
 import { SessionSummary } from '../components/session/SessionSummary';
@@ -35,6 +36,7 @@ export function SessionPage() {
   const typeMap = useMemo(() => new Map<string, BlockType>(blockTypes.map((bt) => [bt.id, bt])), [blockTypes]);
   const toast = useToast();
   const [panelOpen, setPanelOpen] = useState(false);
+  const [output, setOutput] = useState<'pdf' | 'csv' | 'share' | null>(null);
   const [saveTemplate, setSaveTemplate] = useState<{ kind: Template['kind']; name: string; content: () => Template['content'] } | null>(null);
 
   useUndoShortcuts(editor.undo, editor.redo);
@@ -115,6 +117,28 @@ export function SessionPage() {
           <button type="button" className={ui.icon} onClick={() => setSaveTemplate({ kind: 'session', name: session.title, content: () => sessionContentOf(session) })} aria-label={t('session.saveAsTemplate')} title={t('session.saveAsTemplate')}>
             <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
           </button>
+          {(
+            [
+              ['pdf', FileText],
+              ['csv', FileSpreadsheet],
+              ['share', Share2],
+            ] as const
+          ).map(([kind, Icon]) => (
+            <button
+              key={kind}
+              type="button"
+              className={ui.icon}
+              onClick={async () => {
+                // Exports read from the database, so save the last edit first.
+                await editor.flush();
+                setOutput(kind);
+              }}
+              aria-label={t(`session.${kind}`)}
+              title={t(`session.${kind}`)}
+            >
+              <Icon className="h-4 w-4" aria-hidden="true" />
+            </button>
+          ))}
           <button type="button" className={ui.icon} onClick={() => void handleExport()} aria-label={t('session.export')} title={t('session.export')}>
             <Download className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -171,6 +195,7 @@ export function SessionPage() {
         </div>
       </section>
 
+      <OutputDialog kind={output} target={{ kind: 'session', id }} onClose={() => setOutput(null)} />
       {saveTemplate && <SaveTemplateDialog kind={saveTemplate.kind} defaultName={saveTemplate.name} content={saveTemplate.content} onClose={() => setSaveTemplate(null)} />}
     </div>
   );

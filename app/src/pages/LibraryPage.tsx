@@ -1,9 +1,9 @@
-import { useDeferredValue, useMemo, useRef, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useDeferredValue, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
-import { Archive, ArchiveRestore, Copy, Download, LayoutTemplate, Play, Plus, RotateCcw, Trash2 } from 'lucide-react';
+import { Archive, ArchiveRestore, Copy, Download, LayoutTemplate, Play, Plus, RotateCcw, Share2, Trash2 } from 'lucide-react';
 import { db } from '../db/schema';
 import {
   createDrill,
@@ -39,6 +39,8 @@ import { useToast } from '../components/Toast';
 import { ui } from '../components/ui';
 import type { Template } from '../types/model';
 
+const ShareDialog = lazy(() => import('../components/output/ShareDialog'));
+
 export const TABS = ['seasons', 'sessions', 'drills', 'templates', 'trash'] as const;
 export type Tab = (typeof TABS)[number];
 
@@ -60,6 +62,7 @@ export function LibraryPage() {
   const [sort, setSort] = useState<SortBy>('updated');
   const [showArchived, setShowArchived] = useState(false);
   const [useTemplate, setUseTemplate] = useState<Template | null>(null);
+  const [share, setShare] = useState<LibraryEntry | null>(null);
   const [saveTemplate, setSaveTemplate] = useState<{ kind: Template['kind']; name: string; content: () => Promise<Template['content']> } | null>(null);
 
   const data = useLiveQuery(() => listLibrary(db), []);
@@ -294,6 +297,11 @@ export function LibraryPage() {
                           <LayoutTemplate className="h-4 w-4" aria-hidden="true" />
                         </IconButton>
                       )}
+                      {!e.builtIn && (
+                        <IconButton label={t('library.share')} onClick={() => setShare(e)}>
+                          <Share2 className="h-4 w-4" aria-hidden="true" />
+                        </IconButton>
+                      )}
                       <IconButton label={t('library.exportJson')} onClick={() => void exportOne(e)}>
                         <Download className="h-4 w-4" aria-hidden="true" />
                       </IconButton>
@@ -316,6 +324,11 @@ export function LibraryPage() {
         </>
       )}
 
+      {share && (
+        <Suspense fallback={null}>
+          <ShareDialog scope={share.kind} id={share.id} onClose={() => setShare(null)} />
+        </Suspense>
+      )}
       {useTemplate && <UseTemplateDialog template={useTemplate} onClose={() => setUseTemplate(null)} />}
       {saveTemplate && <SaveTemplateDialog kind={saveTemplate.kind} defaultName={saveTemplate.name} content={saveTemplate.content} onClose={() => setSaveTemplate(null)} />}
     </div>

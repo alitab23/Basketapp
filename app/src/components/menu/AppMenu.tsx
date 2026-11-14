@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { matchPath, useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Download, Eraser, Upload, X } from 'lucide-react';
+import { Download, Eraser, FileSpreadsheet, FileText, Upload, X } from 'lucide-react';
 import { LANGUAGES } from '../../i18n';
 import { db } from '../../db/schema';
 import { clearAll } from '../../db/repository';
@@ -10,25 +10,53 @@ import { useToast } from '../Toast';
 import { ui } from '../ui';
 import { ExportDialog } from './ExportDialog';
 import { ImportDialog } from './ImportDialog';
+import type { OutputTarget } from '../output/target';
 
-type Dialog = 'export' | 'import' | 'clear' | null;
+// PDF and CSV load only when used (SPEC.md section 8).
+const PdfDialog = lazy(() => import('../output/PdfDialog'));
+const CsvDialog = lazy(() => import('../output/CsvDialog'));
+
+/** The session or season on screen, so PDF and CSV export it directly. */
+function useCurrentTarget(): OutputTarget | undefined {
+  const { pathname } = useLocation();
+  const session = matchPath('/pass/:id', pathname)?.params.id;
+  if (session) return { kind: 'session', id: session };
+  const season = matchPath('/sasong/:id', pathname)?.params.id;
+  return season ? { kind: 'season', id: season } : undefined;
+}
+
+type Dialog = 'export' | 'import' | 'clear' | 'pdf' | 'csv' | null;
 
 /**
- * The side menu (SPEC.md section 7). Step 4 adds export, import and "Rensa allt";
- * PDF and CSV come in step 5 and the other switches in step 8.
+ * The side menu (SPEC.md section 7): PDF, CSV, JSON export and import,
+ * "Rensa allt" and the language. The other switches come in step 8.
  */
-export function AppMenu({ open, onClose, importFile, onImportFileHandled }: { open: boolean; onClose: () => void; importFile?: File | null; onImportFileHandled?: () => void }) {
+export function AppMenu({
+  open,
+  onClose,
+  importFile,
+  importText,
+  onImportFileHandled,
+}: {
+  open: boolean;
+  onClose: () => void;
+  importFile?: File | null;
+  /** A share link opened in the browser. */
+  importText?: string | null;
+  onImportFileHandled?: () => void;
+}) {
   const { t, i18n } = useTranslation();
   const [dialog, setDialog] = useState<Dialog>(null);
   const panel = useRef<HTMLDivElement>(null);
+  const current = useCurrentTarget();
 
   useEffect(() => {
     if (open) panel.current?.querySelector<HTMLElement>('button')?.focus();
   }, [open]);
 
   useEffect(() => {
-    if (importFile) setDialog('import');
-  }, [importFile]);
+    if (importFile || importText) setDialog('import');
+  }, [importFile, importText]);
 
   const openDialog = (d: Dialog) => {
     onClose();
@@ -59,6 +87,12 @@ export function AppMenu({ open, onClose, importFile, onImportFileHandled }: { op
             </div>
             <nav className="flex-1 space-y-1 p-2">
               <p className="px-3 pt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('menu.data')}</p>
+              <button type="button" className={item} onClick={() => openDialog('pdf')}>
+                <FileText className="h-4 w-4" aria-hidden="true" /> {t('menu.pdf')}
+              </button>
+              <button type="button" className={item} onClick={() => openDialog('csv')}>
+                <FileSpreadsheet className="h-4 w-4" aria-hidden="true" /> {t('menu.csv')}
+              </button>
               <button type="button" className={item} onClick={() => openDialog('export')}>
                 <Download className="h-4 w-4" aria-hidden="true" /> {t('menu.export')}
               </button>
@@ -93,12 +127,17 @@ export function AppMenu({ open, onClose, importFile, onImportFileHandled }: { op
       {dialog === 'import' && (
         <ImportDialog
           initialFile={importFile ?? undefined}
+          initialText={importText ?? undefined}
           onClose={() => {
             setDialog(null);
             onImportFileHandled?.();
           }}
         />
       )}
+      <Suspense fallback={null}>
+        {dialog === 'pdf' && <PdfDialog target={current} onClose={() => setDialog(null)} />}
+        {dialog === 'csv' && <CsvDialog target={current} onClose={() => setDialog(null)} />}
+      </Suspense>
       {dialog === 'clear' && <ClearAllDialog onClose={() => setDialog(null)} onExport={() => setDialog('export')} />}
     </>
   );
