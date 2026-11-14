@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { db } from '../db/schema';
-import { getSession, saveSession } from '../db/repository';
+import type { BasketappDB } from '../db/schema';
+import { getDrill, getSession, saveDrill, saveSession } from '../db/repository';
 import { canRedo, canUndo, commit, createHistory, redo, undo, type History } from '../lib/history';
-import type { Session } from '../types/model';
+import type { Drill, Session } from '../types/model';
 
 export const SAVE_DELAY_MS = 300;
 
@@ -10,42 +11,50 @@ export type EditorState = 'loading' | 'missing' | 'ready';
 export type SaveState = 'saved' | 'saving';
 
 /**
- * Holds one session while it is being edited: undo/redo history and autosave
- * to IndexedDB shortly after each change (SPEC.md section 4: no save button).
+ * Holds one document (a session or a drill) while it is being edited:
+ * undo/redo history and autosave to IndexedDB shortly after each change
+ * (SPEC.md section 4: no save button).
  */
-export function useSessionEditor(id: string) {
+export function useDocEditor<T extends { id: string }>(
+  id: string,
+  load: (db: BasketappDB, id: string) => Promise<T | undefined>,
+  save: (db: BasketappDB, doc: T) => Promise<unknown>,
+) {
   const [state, setState] = useState<EditorState>('loading');
-  const [history, setHistory] = useState<History<Session> | null>(null);
+  const [history, setHistory] = useState<History<T> | null>(null);
   const [saveState, setSaveState] = useState<SaveState>('saved');
-  const lastSaved = useRef<Session | null>(null);
-  const latest = useRef<Session | null>(null);
+  const lastSaved = useRef<T | null>(null);
+  const latest = useRef<T | null>(null);
+  const saveRef = useRef(save);
+  saveRef.current = save;
 
   // Load
   useEffect(() => {
     let cancelled = false;
     setState('loading');
-    void getSession(db, id).then((s) => {
+    void load(db, id).then((doc) => {
       if (cancelled) return;
-      if (!s) return setState('missing');
-      lastSaved.current = s;
-      latest.current = s;
-      setHistory(createHistory(s));
+      if (!doc) return setState('missing');
+      lastSaved.current = doc;
+      latest.current = doc;
+      setHistory(createHistory(doc));
       setState('ready');
     });
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, load]);
 
   const present = history?.present ?? null;
 
   // Debounced autosave
   useEffect(() => {
     latest.current = present;
-    if (!present || present === lastSaved.current) return;
+    if (!present) return;
+    if (present === lastSaved.current) return setSaveState('saved');
     setSaveState('saving');
     const timer = setTimeout(() => {
-      void saveSession(db, present).then(() => {
+      void saveRef.current(db, present).then(() => {
         lastSaved.current = present;
         if (latest.current === present) setSaveState('saved');
       });
@@ -56,10 +65,10 @@ export function useSessionEditor(id: string) {
   // Never lose the last edit when leaving the page or closing the tab.
   useEffect(() => {
     const flush = () => {
-      const s = latest.current;
-      if (s && s !== lastSaved.current) {
-        lastSaved.current = s;
-        void saveSession(db, s);
+      const doc = latest.current;
+      if (doc && doc !== lastSaved.current) {
+        lastSaved.current = doc;
+        void saveRef.current(db, doc);
       }
     };
     window.addEventListener('pagehide', flush);
@@ -73,26 +82,34 @@ export function useSessionEditor(id: string) {
   }, []);
 
   /** Applies a change. Changes with the same `coalesceKey` close in time form one undo step. */
-  const update = useCallback((change: (s: Session) => Session, coalesceKey: string | null = null) => {
+  const update = useCallback((change: (doc: T) => T, coalesceKey: string | null = null) => {
+    // Show "Sparar…" in the same render as the change, never a stale "Sparat".
+    setSaveState('saving');
     setHistory((h) => (h ? commit(h, change(h.present), coalesceKey) : h));
   }, []);
 
   /** Saves any pending change right away, e.g. before duplicating. */
   const flush = useCallback(async () => {
-    const s = latest.current;
-    if (s && s !== lastSaved.current) {
-      lastSaved.current = s;
-      await saveSession(db, s);
+    const doc = latest.current;
+    if (doc && doc !== lastSaved.current) {
+      lastSaved.current = doc;
+      await saveRef.current(db, doc);
       setSaveState('saved');
     }
   }, []);
 
-  const doUndo = useCallback(() => setHistory((h) => (h ? undo(h) : h)), []);
-  const doRedo = useCallback(() => setHistory((h) => (h ? redo(h) : h)), []);
+  const doUndo = useCallback(() => {
+    setSaveState('saving');
+    setHistory((h) => (h ? undo(h) : h));
+  }, []);
+  const doRedo = useCallback(() => {
+    setSaveState('saving');
+    setHistory((h) => (h ? redo(h) : h));
+  }, []);
 
   return {
     state,
-    session: present,
+    doc: present,
     saveState,
     update,
     flush,
@@ -101,6 +118,16 @@ export function useSessionEditor(id: string) {
     canUndo: history ? canUndo(history) : false,
     canRedo: history ? canRedo(history) : false,
   };
+}
+
+export function useSessionEditor(id: string) {
+  const editor = useDocEditor<Session>(id, getSession, saveSession);
+  return { ...editor, session: editor.doc };
+}
+
+export function useDrillEditor(id: string) {
+  const editor = useDocEditor<Drill>(id, getDrill, saveDrill);
+  return { ...editor, drill: editor.doc };
 }
 
 export type SessionEditor = ReturnType<typeof useSessionEditor>;

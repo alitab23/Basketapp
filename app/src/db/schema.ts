@@ -28,7 +28,10 @@ export class BasketappDB extends Dexie {
   meta!: EntityTable<MetaEntry, 'key'>;
 
   constructor(name: string = DB_NAME) {
-    super(name);
+    // Dexie's optimistic query cache can return stale results for sorted queries
+    // after an update that does not touch the sort key (e.g. moving to the trash),
+    // so live queries always read from IndexedDB. Reads are local and fast anyway.
+    super(name, { cache: 'disabled' });
     // Add new versions below; never change an existing one.
     this.version(1).stores({
       seasons: 'id, teamId, updatedAt, startDate',
