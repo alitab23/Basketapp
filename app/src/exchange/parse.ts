@@ -1,6 +1,7 @@
 import { CURRENT_VERSION, countsOf, FORMAT, type ExportFile, type ImportCounts } from './format';
 import { exportFileV1 } from './schema';
 import { decodeSessionplan, sessionFromSessionplan } from './sessionplan';
+import { decodeShareLink, isShareLink } from './shareLink';
 
 export type ParseError =
   | { code: 'invalidJson' }
@@ -10,7 +11,7 @@ export type ParseError =
   | { code: 'empty' };
 
 export type ParseResult =
-  | { ok: true; file: ExportFile; counts: ImportCounts; source: 'basketapp' | 'sessionplan'; title?: string }
+  | { ok: true; file: ExportFile; counts: ImportCounts; source: 'basketapp' | 'sessionplan' | 'link'; title?: string }
   | { ok: false; error: ParseError };
 
 /**
@@ -43,6 +44,12 @@ const isError = (x: unknown): x is ParseError => !!x && typeof x === 'object' &&
  */
 export function parseImport(text: string, untitled = 'sessionplan'): ParseResult {
   const trimmed = text.trim();
+  if (isShareLink(trimmed)) {
+    const json = decodeShareLink(trimmed);
+    if (!json) return { ok: false, error: { code: 'invalid', detail: 'link' } };
+    const result = parseImport(json, untitled);
+    return result.ok ? { ...result, source: 'link', title: result.file.sessions[0]?.title ?? result.file.drills[0]?.title } : result;
+  }
   if (/^https?:\/\//.test(trimmed) || trimmed.includes('#data=')) return fromSessionplan(trimmed, untitled);
 
   let raw: unknown;

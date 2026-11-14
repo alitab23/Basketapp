@@ -46,7 +46,10 @@
     "redo": "Redo",
     "empty": "The session is empty. Add a drill, a break or a heading.",
     "saveAsTemplate": "Save the session as a template",
-    "export": "Export the session"
+    "export": "Export the session",
+    "pdf": "Export the session as PDF",
+    "csv": "Export the session as spreadsheet (CSV)",
+    "share": "Share the session as a link"
   },
   "block": {
     "addDrill": "Drill",
@@ -108,7 +111,9 @@
     "saveAsTemplate": "Save the season as a template",
     "export": "Export the season",
     "delete": "Delete the season",
-    "confirmDelete": "Move the season “{{name}}” and its sessions to the trash?"
+    "confirmDelete": "Move the season “{{name}}” and its sessions to the trash?",
+    "pdf": "Export the season as PDF",
+    "csv": "Export the season as spreadsheet (CSV)"
   },
   "save": {
     "saved": "Saved",
@@ -235,7 +240,11 @@
       "position": "{{n}} of {{total}}"
     },
     "moveItem": "Move “{{name}}”",
-    "thumbnail": "Drawing thumbnail"
+    "thumbnail": "Drawing thumbnail",
+    "download": {
+      "png": "Download the drawing as PNG",
+      "svg": "Download the drawing as SVG (vector)"
+    }
   },
   "builtin": {
     "tags": {
@@ -403,7 +412,8 @@
       "daysLeft_other": "{{count}} days left",
       "nothing": "The trash is empty.",
       "restored": "“{{title}}” was restored."
-    }
+    },
+    "share": "Share link"
   },
   "drill": {
     "untitled": "New drill",
@@ -457,7 +467,9 @@
     "import": "Import data",
     "clearAll": "Clear everything",
     "language": "Language",
-    "data": "Data"
+    "data": "Data",
+    "pdf": "Export as PDF",
+    "csv": "Export as spreadsheet (CSV)"
   },
   "export": {
     "title": "Export data",
@@ -508,8 +520,10 @@
       "invalid": "The file has the wrong content ({{detail}}).",
       "sessionplan": "The sessionplan link or file couldn't be read.",
       "empty": "The file contains nothing to import.",
-      "read": "The file couldn't be read."
-    }
+      "read": "The file couldn't be read.",
+      "link": "The link is broken or incomplete. Ask for a new link."
+    },
+    "fromLink": "Shared via link: “{{title}}”"
   },
   "clearAll": {
     "title": "Clear everything",
@@ -530,5 +544,60 @@
     "empty": "No results.",
     "dragHint": "Drag into the session or click Add. The drill is added as a copy.",
     "dropHere": "Drop here to add at the end"
+  },
+  "csv": {
+    "start": "Start",
+    "end": "End",
+    "title": "Title",
+    "blockType": "Block type",
+    "minutes": "Minutes",
+    "instructions": "Instruction",
+    "date": "Date",
+    "session": "Session"
+  },
+  "pdf": {
+    "title": "Export as PDF",
+    "schedule": "Schedule",
+    "time": "Time",
+    "drill": "Drill",
+    "type": "Block type",
+    "minutes": "Length",
+    "page": "Page {{page}} of {{total}}",
+    "orientation": "Page format",
+    "portrait": "A4 portrait",
+    "landscape": "A4 landscape",
+    "color": "Colours",
+    "colorOn": "Colour",
+    "colorOff": "Black and white",
+    "content": "Content",
+    "withInstructions": "With instructions",
+    "withoutInstructions": "Only schedule and pictures",
+    "perRow": "Pictures per row",
+    "language": "PDF language",
+    "preview": "Preview",
+    "making": "Creating PDF…",
+    "download": "Download PDF",
+    "error": "The PDF could not be created ({{detail}}).",
+    "target": "What do you want to export?",
+    "session": "A session",
+    "season": "A season",
+    "choose": "Choose…",
+    "done": "{{file}} has been downloaded."
+  },
+  "csvExport": {
+    "title": "Export as spreadsheet (CSV)",
+    "info": "One row per block with start, end, title, block type, minutes and instruction. Opens in Excel, Numbers and Google Sheets.",
+    "submit": "Download CSV",
+    "done": "{{file}} has been downloaded."
+  },
+  "share": {
+    "button": "Share link",
+    "title": "Share link",
+    "info": "The whole session is inside the link, drawings included. Whoever opens it gets their own copy in their browser – nothing is stored on a server.",
+    "noPhotos": "Photos are left out, because the link would be too long. The drawings are included. Send a JSON file or a PDF if the photos are needed.",
+    "tooLong": "This is too large for a link. Export it as a JSON file or a PDF instead.",
+    "link": "Link",
+    "copy": "Copy link",
+    "copied": "The link has been copied."
   }
 }
