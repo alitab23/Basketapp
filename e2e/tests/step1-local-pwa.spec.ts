@@ -1,13 +1,17 @@
 import { expect, test, type Page } from '@playwright/test';
 
+/** Creates a session from the start page and returns to the start page. */
 async function createSession(page: Page) {
   await page.getByRole('button', { name: /Nytt pass/ }).click();
+  await expect(page).toHaveURL(/\/pass\//);
+  await expect(page.getByTestId('save-status')).toHaveText('Sparat');
+  await page.getByRole('link', { name: /Basketapp/ }).click();
   await expect(page.getByTestId('session-list').getByRole('listitem')).toHaveCount(1);
 }
 
 test('start page loads in Swedish without an account', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Basketapp' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Basketapp/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /Nytt pass/ })).toBeVisible();
   await expect(page.getByText(/Inga pass ännu/)).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'sv');
@@ -90,7 +94,7 @@ test('the app opens offline and shows locally saved sessions', async ({ page, co
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Basketapp' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Basketapp/ })).toBeVisible();
   await expect(page.getByTestId('session-list').getByRole('listitem')).toHaveCount(1);
   await expect(page.getByText('Offline – sparas lokalt')).toBeVisible();
 });

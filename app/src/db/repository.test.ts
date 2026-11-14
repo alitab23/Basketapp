@@ -1,6 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { BasketappDB } from './schema';
-import { createSession, ensureDefaults, getSession, listBlockTypes, listRecentSessions } from './repository';
+import {
+  createSeason,
+  createSession,
+  deleteSession,
+  duplicateSession,
+  ensureDefaults,
+  getSeason,
+  getSession,
+  listBlockTypes,
+  listRecentSessions,
+  listSeasonSessions,
+  moveSession,
+  saveSession,
+  updateSeason,
+} from './repository';
+import { newBlock } from '../lib/blockOps';
 import { DEFAULT_BLOCK_TYPES } from './defaults';
 import { newId } from '../lib/id';
 
@@ -75,5 +90,63 @@ describe('default block types', () => {
   it('runs safely when called twice at the same time', async () => {
     await Promise.all([ensureDefaults(db, identity), ensureDefaults(db, identity)]);
     expect(await listBlockTypes(db)).toHaveLength(8);
+  });
+});
+
+describe('saving and changing sessions', () => {
+  it('saves edits and stamps updatedAt', async () => {
+    const s = await createSession(db, { title: 'A' });
+    const before = s.updatedAt;
+    await new Promise((r) => setTimeout(r, 5));
+    const saved = await saveSession(db, { ...s, title: 'B', items: [newBlock({ title: 'X', duration: 15 })] });
+    expect(saved.updatedAt > before).toBe(true);
+    expect(await getSession(db, s.id)).toMatchObject({ title: 'B', items: [{ title: 'X', duration: 15 }] });
+  });
+
+  it('deletes a session', async () => {
+    const s = await createSession(db, { title: 'A' });
+    await deleteSession(db, s.id);
+    expect(await getSession(db, s.id)).toBeUndefined();
+  });
+
+  it('duplicates a session with new ids, leaving the original untouched', async () => {
+    const s = await createSession(db, { title: 'A', items: [newBlock({ title: 'X' })] });
+    const copy = (await duplicateSession(db, s.id, { title: 'A (kopia)', date: '2026-12-01' }))!;
+    expect(copy.id).not.toBe(s.id);
+    expect(copy.items[0]!.id).not.toBe(s.items[0]!.id);
+    expect(copy).toMatchObject({ title: 'A (kopia)', date: '2026-12-01' });
+    expect(await getSession(db, s.id)).toEqual(s);
+  });
+
+  it('moves a session to another season and date', async () => {
+    const season = await createSeason(db, { name: 'S', startDate: '2026-08-01', endDate: '2027-04-30' });
+    const s = await createSession(db, { title: 'A' });
+    await moveSession(db, s.id, { seasonId: season.id, date: '2026-09-02' });
+    expect(await getSession(db, s.id)).toMatchObject({ seasonId: season.id, date: '2026-09-02' });
+  });
+});
+
+describe('seasons', () => {
+  it('creates and updates a season', async () => {
+    const season = await createSeason(db, { name: 'U16', startDate: '2026-08-01', endDate: '2027-04-30' });
+    expect(season).toMatchObject({ teamId: null, archived: false });
+    await updateSeason(db, season.id, { name: 'U16 Flickor' });
+    expect((await getSeason(db, season.id))!.name).toBe('U16 Flickor');
+  });
+
+  it('lists a season’s sessions by date and time, undated last', async () => {
+    const season = await createSeason(db, { name: 'S', startDate: '2026-08-01', endDate: '2027-04-30' });
+    const seasonId = season.id;
+    await createSession(db, { title: 'utan datum', seasonId });
+    await createSession(db, { title: 'sep 18', seasonId, date: '2026-09-01', startTime: '18:00' });
+    await createSession(db, { title: 'aug', seasonId, date: '2026-08-20' });
+    await createSession(db, { title: 'sep 09', seasonId, date: '2026-09-01', startTime: '09:00' });
+    await createSession(db, { title: 'annan säsong', date: '2026-08-01' });
+    expect((await listSeasonSessions(db, seasonId)).map((s) => s.title)).toEqual([
+      'aug',
+      'sep 09',
+      'sep 18',
+      'utan datum',
+    ]);
   });
 });

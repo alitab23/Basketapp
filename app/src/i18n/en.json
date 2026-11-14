@@ -1,19 +1,110 @@
 {
   "app": {
     "name": "Basketapp",
-    "tagline": "Plan practices and draw drills"
+    "tagline": "Plan practices and draw drills",
+    "home": "To the start page"
   },
   "start": {
     "newSession": "New session",
+    "newSeason": "New season",
     "recentSessions": "Recently changed sessions",
+    "seasons": "Seasons",
     "empty": "No sessions yet. Create your first session to get started.",
+    "noSeasons": "No seasons yet.",
     "blocks_one": "{{count}} block",
     "blocks_other": "{{count}} blocks",
-    "changed": "changed {{when}}",
-    "comingSoon": "The session view arrives in the next step."
+    "sessions_one": "{{count}} session",
+    "sessions_other": "{{count}} sessions",
+    "changed": "changed {{when}}"
   },
   "session": {
-    "untitled": "New session"
+    "untitled": "New session",
+    "copyTitle": "{{title}} (copy)",
+    "notFound": "This session doesn't exist. It may have been deleted.",
+    "loading": "Loading session…",
+    "title": "Title",
+    "date": "Date",
+    "startTime": "Start time",
+    "location": "Gym",
+    "participants": "Number of players",
+    "coach": "Coach in charge",
+    "focus": "Theme",
+    "description": "Description",
+    "maxDuration": "Gym time limit (min)",
+    "season": "Season",
+    "noSeason": "No season (stand-alone)",
+    "total": "Total time",
+    "overMax": "The session is {{over}} min longer than the gym time limit ({{max}} min).",
+    "distribution": "Split by block type",
+    "noType": "No block type",
+    "nextDay": "+1 day",
+    "duplicate": "Duplicate session",
+    "delete": "Delete session",
+    "confirmDelete": "Delete the session “{{title}}”? This can't be undone.",
+    "undo": "Undo",
+    "redo": "Redo",
+    "empty": "The session is empty. Add a drill, a break or a heading."
+  },
+  "block": {
+    "addDrill": "Drill",
+    "addBreak": "Break",
+    "addSection": "Heading",
+    "newDrill": "New drill",
+    "newBreak": "Break",
+    "newSection": "New heading",
+    "title": "Title",
+    "duration": "Length in minutes",
+    "minus5": "5 minutes shorter",
+    "plus5": "5 minutes longer",
+    "type": "Block type",
+    "noType": "No block type",
+    "instructions": "Instructions",
+    "instructionsHint": "Purpose, organisation and coaching points. Markdown works.",
+    "write": "Write",
+    "preview": "Preview",
+    "nothingToPreview": "Nothing to show yet.",
+    "material": "Equipment",
+    "materialPlaceholder": "Balls, cones, bibs",
+    "playersNeeded": "Players",
+    "playersNeededPlaceholder": "e.g. 4 on 4 + 2",
+    "expand": "Show details",
+    "collapse": "Hide details",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "dragHandle": "Move “{{title}}”",
+    "sectionTotal": "{{duration}} in total",
+    "time": "{{start}}–{{end}}"
+  },
+  "dnd": {
+    "pickedUp": "Picked up “{{title}}”. Use the arrow keys to move and space to drop.",
+    "movedOver": "“{{title}}” is over position {{position}} of {{total}}.",
+    "dropped": "“{{title}}” was dropped at position {{position}} of {{total}}.",
+    "cancelled": "Move cancelled. “{{title}}” stayed in place.",
+    "instructions": "Press space or Enter to pick up. Move with the arrow keys, drop with space or Enter, cancel with Escape.",
+    "movedSession": "The session was moved to {{date}}."
+  },
+  "season": {
+    "untitled": "New season",
+    "notFound": "This season doesn't exist.",
+    "name": "Name",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "description": "Description",
+    "totalTime": "Total practice time",
+    "list": "List",
+    "calendar": "Calendar",
+    "newSession": "New session",
+    "duplicate": "Duplicate",
+    "noDate": "No date",
+    "empty": "No sessions in this season yet.",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today"
+  },
+  "save": {
+    "saved": "Saved",
+    "saving": "Saving…",
+    "offline": "Offline – saved locally"
   },
   "duration": {
     "hoursMinutes": "{{hours}} h {{minutes}} min",
@@ -26,6 +117,9 @@
   },
   "network": {
     "offline": "Offline – saved locally"
+  },
+  "notFound": {
+    "title": "This page doesn't exist."
   },
   "pwa": {
     "offlineReady": "The app now works offline too.",

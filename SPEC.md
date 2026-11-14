@@ -107,6 +107,7 @@ interface Session {          // ett träningspass
   coach?: string;            // ansvarig
   focus?: string;            // tema, t.ex. "Pick and roll-försvar"
   description?: string;      // markdown
+  maxDuration?: number;      // valfri maxtid för hallen i minuter; varning om passet blir längre
   items: Block[];            // ordnad lista
   fromTemplateId?: string;
   updatedAt: string; updatedBy?: string;
