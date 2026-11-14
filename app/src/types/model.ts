@@ -124,6 +124,8 @@ export interface Session {
   coach?: string;
   focus?: string;
   description?: string;
+  /** Optional max length for the hall in minutes; a warning shows when exceeded. */
+  maxDuration?: number;
   items: Block[];
   fromTemplateId?: string;
   updatedAt: string;
