@@ -1,0 +1,51 @@
+{
+  "app": {
+    "name": "Basketapp",
+    "tagline": "Plan practices and draw drills"
+  },
+  "start": {
+    "newSession": "New session",
+    "recentSessions": "Recently changed sessions",
+    "empty": "No sessions yet. Create your first session to get started.",
+    "blocks_one": "{{count}} block",
+    "blocks_other": "{{count}} blocks",
+    "changed": "changed {{when}}",
+    "comingSoon": "The session view arrives in the next step."
+  },
+  "session": {
+    "untitled": "New session"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "hours": "{{hours}} h",
+    "minutes": "{{minutes}} min"
+  },
+  "storage": {
+    "local": "Everything is saved locally in this browser. No account needed.",
+    "notPersisted": "The browser may clear local data if storage runs low. Export regularly."
+  },
+  "network": {
+    "offline": "Offline – saved locally"
+  },
+  "pwa": {
+    "offlineReady": "The app now works offline too.",
+    "updateAvailable": "A new version is available.",
+    "reload": "Update",
+    "close": "Close"
+  },
+  "language": {
+    "label": "Language",
+    "sv": "Svenska",
+    "en": "English"
+  },
+  "blockTypes": {
+    "warmup": "Warm-up",
+    "technique": "Technique / fundamentals",
+    "shooting": "Shooting",
+    "offense": "Offense / plays",
+    "defense": "Defense",
+    "scrimmage": "Scrimmage",
+    "conditioning": "Conditioning",
+    "break": "Break / water"
+  }
+}

@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+/* Dark mode is controlled by a `dark` class on <html>, so a manual toggle can be added later. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  html.dark {
+    @apply bg-slate-950 text-slate-100;
+    color-scheme: dark;
+  }
+}
